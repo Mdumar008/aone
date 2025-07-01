@@ -1,0 +1,196 @@
+/*
+ * As provided in the previous "professional code" response.
+ * No changes needed here for multiple instances as styles are class-based.
+ */
+
+/* Basic Reset & Body Styling for Centering */
+body {
+    margin: 0;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #f0f2f5;
+    color: #333;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    align-items: center; /* Center horizontally */
+    /* Removed justify-content: center from body to allow content to flow */
+}
+
+/* Page Header & Footer for context */
+.page-header, .page-footer {
+    width: 100%;
+    text-align: center;
+    padding: 20px;
+    background-color: #ffffff;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    margin-bottom: 20px;
+    box-sizing: border-box; /* Include padding in width */
+}
+
+.page-header h1 {
+    margin-top: 0;
+    color: #0056b3;
+}
+
+.page-footer {
+    margin-top: auto; /* Push footer to the bottom */
+    font-size: 0.9em;
+    color: #666;
+    flex-shrink: 0; /* Prevent footer from shrinking */
+}
+
+/* Main Content Area */
+.main-content {
+    flex-grow: 1; /* Allows main content to take available space */
+    display: flex;
+    flex-direction: column; /* Stack sliders vertically */
+    align-items: center; /* Center each slider horizontally */
+    width: 100%;
+    max-width: 900px; /* Limit overall content width */
+    padding: 20px; /* Add some padding around the content */
+    box-sizing: border-box;
+}
+
+.slider-section {
+    width: 100%; /* Take full width of main-content */
+    margin-bottom: 50px; /* Space between sections/sliders */
+    text-align: center;
+}
+
+.slider-section h2 {
+    color: #007bff;
+    margin-bottom: 20px;
+}
+
+
+/* Slider Wrapper */
+.slider-wrapper {
+    position: relative;
+    width: 100%; /* Take full width of its parent (.slider-section) */
+    /* max-width: 800px;  This can be managed by main-content's max-width now */
+    aspect-ratio: 16 / 9; /* Maintain a consistent aspect ratio */
+    overflow: hidden; /* Hide overflow images */
+    border-radius: 12px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+    background-color: #ffffff;
+    /* margin: 20px 0; Removed as slider-section handles margin */
+}
+
+/* Slider Track (Container for all images) */
+.slider-track {
+    display: flex;
+    height: 100%;
+    transition: transform 0.6s cubic-bezier(0.25, 0.1, 0.25, 1); /* Smooth ease-in-out */
+}
+
+/* Individual Slider Images */
+.slider-image {
+    min-width: 100%; /* Each image takes full width of the track */
+    height: 100%;
+    object-fit: cover; /* Cover the area, cropping if necessary */
+    display: block; /* Remove any extra space below image */
+    flex-shrink: 0; /* Prevent images from shrinking */
+    user-select: none; /* Prevent image dragging */
+    -webkit-user-drag: none; /* Prevent image dragging on WebKit */
+}
+
+/* Slider Controls (Buttons) */
+.slider-controls {
+    position: absolute;
+    top: 50%;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    transform: translateY(-50%);
+    padding: 0 20px;
+    box-sizing: border-box;
+    pointer-events: none; /* Allow clicks to pass through initially */
+}
+
+.slider-btn {
+    background-color: rgba(0, 0, 0, 0.4);
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 45px;
+    height: 45px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    font-size: 1.8em;
+    font-weight: bold;
+    opacity: 0.8;
+    transition: background-color 0.3s ease, opacity 0.3s ease, transform 0.2s ease;
+    z-index: 10; /* Ensure buttons are above images */
+    pointer-events: auto; /* Re-enable pointer events for buttons */
+    outline: none; /* Remove default focus outline */
+}
+
+.slider-btn:hover,
+.slider-btn:focus {
+    background-color: rgba(0, 0, 0, 0.7);
+    opacity: 1;
+    transform: scale(1.05);
+}
+
+/* Slider Pagination (Dots) */
+.slider-pagination {
+    position: absolute;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 10px;
+    z-index: 10;
+}
+
+.pagination-dot {
+    width: 12px;
+    height: 12px;
+    background-color: rgba(255, 255, 255, 0.6);
+    border-radius: 50%;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    border: 2px solid rgba(255, 255, 255, 0.8); /* Border for better visibility */
+}
+
+.pagination-dot.active {
+    background-color: #007bff; /* Active dot color */
+    border-color: #007bff;
+    transform: scale(1.1);
+}
+
+.pagination-dot:hover,
+.pagination-dot:focus {
+    background-color: rgba(255, 255, 255, 0.9);
+    border-color: #007bff;
+    outline: none;
+}
+
+/* Slider Timer (Progress Bar) */
+.slider-timer {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 8px; /* Height of the timer bar */
+    background-color: rgba(0, 0, 0, 0.2);
+    border-bottom-left-radius: 12px;
+    border-bottom-right-radius: 12px;
+    overflow: hidden; /* Hide overflow of progress bar */
+}
+
+.slider-progress-bar {
+    width: 0%;
+    height: 100%;
+    background-color: #28a745; /* Green progress bar */
+    transition: width linear; /* Animated via JS, but good to have a fallback */
+    transform-origin: left; /* Ensure it grows from left */
+}
+
+/* Pause the progress bar on hover/focus */
+.slider-wrapper:hover .slider-progress-bar,
+.slider-wrapper:focus-within .slider-progress-bar {
+    animation-play-state: paused !important; /* Important to override JS animation */
+}
