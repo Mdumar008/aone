@@ -1,0 +1,2182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aone Hospitality Services - Product Catalog</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Custom Tailwind Configuration for Gold color */
+        :root {
+            --color-gold: #D4AF37; /* A common gold shade */
+        }
+        .text-gold { color: var(--color-gold); }
+        .bg-gold { background-color: var(--color-gold); }
+        .border-gold { border-color: var(--color-gold); }
+
+        /* Inter Font from Google Fonts */
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #FFFFFF; /* White background for the entire page */
+            color: #1A1A1A; /* Dark text for readability */
+        }
+
+        /* Ensure smooth scrolling behavior */
+        html {
+            scroll-behavior: smooth;
+        }
+
+        /* Custom styles for professional appearance */
+        .header-gradient {
+            background: linear-gradient(to right, #FFFFFF, #F8F8F8);
+        }
+
+        .item-card {
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+            transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+            height: 100%; /* Ensure cards in a row have similar height */
+            display: flex;
+            flex-direction: column;
+        }
+
+        .item-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .add-to-inquiry-button {
+            transition: background-color 0.2s ease-in-out, transform 0.1s ease-in-out;
+            margin-top: auto; /* Push button to bottom */
+        }
+
+        .add-to-inquiry-button:hover {
+            background-color: #B89C2F; /* Slightly darker gold on hover */
+            transform: translateY(-2px);
+        }
+
+        /* Responsive grid for items - Adjusted for 5 in a row on very large screens */
+        .products-grid {
+            display: grid;
+            gap: 1.5rem; /* Gap between cards */
+            grid-template-columns: repeat(1, 1fr); /* Default: 1 column for very small screens */
+        }
+
+        @media (min-width: 500px) { /* Custom breakpoint for slightly wider mobiles/small tablets */
+            .products-grid {
+                grid-template-columns: repeat(2, 1fr); /* 2 columns */
+            }
+        }
+
+        @media (min-width: 768px) { /* md breakpoint: Tablets */
+            .products-grid {
+                grid-template-columns: repeat(3, 1fr); /* 3 columns */
+            }
+        }
+
+        @media (min-width: 1024px) { /* lg breakpoint: Laptops */
+            .products-grid {
+                grid-template-columns: repeat(4, 1fr); /* 4 columns */
+            }
+        }
+
+        @media (min-width: 1280px) { /* xl breakpoint: Desktops */
+            .products-grid {
+                grid-template-columns: repeat(5, 1fr); /* 5 columns from XL upwards */
+            }
+        }
+
+        /* Placeholder image styling */
+        .item-image-placeholder {
+            background-color: #E5E7EB; /* Light grey */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #6B7280;
+            font-size: 0.85rem; /* Slightly smaller font for narrower cards */
+            height: 160px; /* Adjusted height for consistency with more columns */
+            object-fit: cover;
+            width: 100%;
+            border-radius: 0.5rem; /* Apply border-radius to placeholder */
+        }
+
+        /* Category Link Styling in Nav */
+        .category-nav-link {
+            @apply px-3 py-2 rounded-md text-sm font-medium text-gray-700 hover:bg-gray-100 hover:text-gold transition-colors duration-200;
+        }
+
+        /* Adjust header padding for sticky nav to avoid overlap */
+        .header-spacer {
+            height: 120px; /* Default for mobile header height */
+            visibility: hidden; /* Keep space but hide content */
+        }
+
+        @media (min-width: 768px) {
+            .header-spacer {
+                height: 100px; /* Adjust for desktop header height */
+            }
+            .category-nav {
+                top: 80px; /* Position below fixed header on desktop */
+            }
+        }
+        @media (min-width: 1024px) {
+             .header-spacer {
+                height: 90px; /* Adjust for larger screens */
+            }
+             .category-nav {
+                top: 80px; /* Position below fixed header */
+            }
+        }
+
+        /* Scrollbar styling for category nav */
+        .category-nav-scroll {
+            -webkit-overflow-scrolling: touch;
+            scrollbar-width: none; /* Firefox */
+            -ms-overflow-style: none;  /* IE and Edge */
+        }
+        .category-nav-scroll::-webkit-scrollbar {
+            display: none; /* Chrome, Safari, Opera */
+        }
+
+        /* Floating Inquiry Button */
+        .floating-inquiry-button {
+            position: fixed;
+            bottom: 1.5rem;
+            right: 1.5rem;
+            background-color: #25D366; /* WhatsApp green */
+            color: white;
+            padding: 0.75rem 1.25rem;
+            border-radius: 9999px; /* Fully rounded */
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-weight: 600;
+            cursor: pointer;
+            z-index: 50;
+            transition: background-color 0.2s ease-in-out, transform 0.1s ease-in-out;
+            font-size: 0.9rem;
+        }
+
+        .floating-inquiry-button:hover {
+            background-color: #1DA851; /* Darker green on hover */
+            transform: translateY(-3px);
+        }
+
+        .inquiry-count {
+            background-color: #D4AF37; /* Gold for count */
+            color: white;
+            border-radius: 50%;
+            padding: 0.2rem 0.5rem;
+            font-size: 0.75rem;
+            font-weight: bold;
+            line-height: 1;
+            min-width: 1.5rem; /* Ensure circular shape */
+            text-align: center;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* Modal Styles */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(0, 0, 0, 0.6);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 100;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s ease-in-out, visibility 0.3s ease-in-out;
+        }
+
+        .modal-overlay.show {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .modal-content {
+            background-color: white;
+            border-radius: 1rem;
+            padding: 1.5rem;
+            width: 90%;
+            max-width: 600px;
+            max-height: 90vh;
+            overflow-y: auto;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
+            position: relative;
+            transform: translateY(20px);
+            transition: transform 0.3s ease-in-out;
+        }
+
+        .modal-overlay.show .modal-content {
+            transform: translateY(0);
+        }
+
+        .modal-close-button {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: #6B7280;
+        }
+
+        .modal-close-button:hover {
+            color: #1A1A1A;
+        }
+
+        .inquiry-list-ul {
+            list-style: disc;
+            padding-left: 1.5rem;
+            max-height: 60vh; /* Limit height and allow scrolling */
+            overflow-y: auto;
+            border: 1px solid #E5E7EB;
+            border-radius: 0.5rem;
+            padding: 1rem;
+        }
+
+        .inquiry-list-ul li {
+            padding: 0.5rem 0;
+            border-bottom: 1px solid #F3F4F6;
+        }
+        .inquiry-list-ul li:last-child {
+            border-bottom: none;
+        }
+    </style>
+    <script>
+        // Dynamically add a custom gold color to Tailwind's config
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        gold: 'var(--color-gold)',
+                    },
+                }
+            }
+        }
+
+        let inquiryList = []; // Global array to store selected items for inquiry
+        const phoneNumber = '919867531298'; // WhatsApp number with country code
+
+        /**
+         * Updates the counter displayed on the floating inquiry button.
+         */
+        function updateInquiryCounter() {
+            const counterElement = document.getElementById('inquiry-count');
+            if (counterElement) {
+                counterElement.textContent = inquiryList.length;
+                if (inquiryList.length > 0) {
+                    document.getElementById('floating-inquiry-button').classList.remove('hidden');
+                } else {
+                    document.getElementById('floating-inquiry-button').classList.add('hidden');
+                }
+            }
+        }
+
+        /**
+         * Adds an item to the inquiry list.
+         * @param {string} itemName - The name of the item.
+         * @param {string} itemSpec - The specification/brand of the item.
+         */
+        function addToInquiryList(itemName, itemSpec) {
+            inquiryList.push({ name: itemName, spec: itemSpec });
+            updateInquiryCounter();
+            // Optional: Provide visual feedback, e.g., changing button text temporarily
+            // For now, just a console log for debugging
+            console.log(`Added to inquiry list: ${itemName}`);
+        }
+
+        /**
+         * Populates the modal with items from the inquiry list and displays it.
+         */
+        function openInquiryModal() {
+            const modalOverlay = document.getElementById('inquiry-modal-overlay');
+            const inquiryListUl = document.getElementById('modal-inquiry-list');
+            const modalTotalItems = document.getElementById('modal-total-items');
+
+            inquiryListUl.innerHTML = ''; // Clear previous list items
+
+            if (inquiryList.length === 0) {
+                inquiryListUl.innerHTML = '<li class="text-gray-500">Your inquiry list is empty. Add items to request a quotation.</li>';
+                modalTotalItems.textContent = '0 items';
+            } else {
+                inquiryList.forEach((item, index) => {
+                    const listItem = document.createElement('li');
+                    listItem.className = 'text-gray-800';
+                    listItem.innerHTML = `<span class="font-semibold">${item.name}</span> <span class="text-gray-600">(Brand: ${item.spec})</span>`;
+                    inquiryListUl.appendChild(listItem);
+                });
+                modalTotalItems.textContent = `${inquiryList.length} items`;
+            }
+
+            modalOverlay.classList.add('show');
+        }
+
+        /**
+         * Closes the inquiry modal.
+         */
+        function closeInquiryModal() {
+            const modalOverlay = document.getElementById('inquiry-modal-overlay');
+            modalOverlay.classList.remove('show');
+        }
+
+        /**
+         * Generates and opens a WhatsApp message with the current inquiry list.
+         */
+        function sendInquiryViaWhatsApp() {
+            if (inquiryList.length === 0) {
+                // Use a custom message box instead of alert()
+                const messageBox = document.createElement('div');
+                messageBox.className = 'fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-red-500 text-white p-4 rounded-md shadow-lg z-[101]';
+                messageBox.textContent = 'Your inquiry list is empty. Please add items before sending.';
+                document.body.appendChild(messageBox);
+                setTimeout(() => {
+                    messageBox.remove();
+                }, 3000); // Remove message after 3 seconds
+                return;
+            }
+
+            let message = "Hello Aone Hospitality Services, I would like to inquire about the following items:\n\n";
+            inquiryList.forEach((item, index) => {
+                message += `${index + 1}. ${item.name} (Brand: ${item.spec})\n`;
+            });
+            message += "\nThank you!";
+
+            const whatsappUrl = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`;
+            window.open(whatsappUrl, '_blank');
+
+            clearInquiryList(); // Clear the list after sending
+            closeInquiryModal(); // Close modal after sending
+        }
+
+        /**
+         * Clears the entire inquiry list.
+         */
+        function clearInquiryList() {
+            inquiryList = [];
+            updateInquiryCounter();
+            const inquiryListUl = document.getElementById('modal-inquiry-list');
+            inquiryListUl.innerHTML = '<li class="text-gray-500">Your inquiry list is empty. Add items to request a quotation.</li>';
+            document.getElementById('modal-total-items').textContent = '0 items';
+        }
+
+
+        const categories = [
+    {
+        "name": "Paper & Tissue Products",
+        "id": "paper-tissue",
+        "products": [
+            {
+                "name": "5855 TWL SCOTT COMPACT WHT 110X16 (C Fold 110 Sheets Per Pkt), 1 Box = 16 PKT (KIMBERLY)",
+                "spec": "KIMBERLY",
+                "image": "https://placehold.co/160x160/E5E7EB/6B7280?text=Item+Image"
+            },
+            {
+                "name": "12388 TWL SCOTT SLIMROLL 176MX6 (HRT 176 Meter Per Roll), 1 Box = 6 Roll (KIMBERLY)",
+                "spec": "KIMBERLY",
+                "image": "https://placehold.co/160x160/E5E7EB/6B7280?text=Item+Image"
+            },
+            {
+                "name": "02410054 HRT White 200mm 165 Mtrs (1 Case = 8 Roll) Greenlime Pudumjee (PUDUMJEE)",
+                "spec": "PUDUMJEE",
+                "image": "https://placehold.co/160x160/E5E7EB/6B7280?text=Item+Image"
+            },
+            {
+                "name": "30896 HR/TWL KIMSOFT CSR 165M (1 Case = 9 Roll) (KIMBERLY)",
+                "spec": "KIMBERLY",
+                "image": "https://placehold.co/160x160/E5E7EB/6B7280?text=Item+Image"
+            },
+            {
+                "name": "04001 KIMSOFT BATHROOM TISSUE-375 S (1 Case = 80 Roll & 1 Roll = 375 Sheets) (KIMBERLY)",
+                "spec": "KIMBERLY",
+                "image": "https://placehold.co/160x160/E5E7EB/6B7280?text=Item+Image"
+            },
+            {
+                "name": "Toilet Roll 100 GM (PUDUMJEE)",
+                "spec": "PUDUMJEE",
+                "image": "https://placehold.co/160x160/E5E7EB/6B7280?text=Item+Image"
+            },
+            {
+                "name": "BTR 450 sheet, 10 x 11cm, 2 Ply, 18GSM- Greenlime Pudumjee Product Code: 04410087T (1 Case 100 Rolls) (PUDUMJEE)",
+                "spec": "PUDUMJEE",
+                "image": "https://placehold.co/160x160/E5E7EB/6B7280?text=Item+Image"
+            },
+            {
+                "name": "Green Lime Toilet Rolls 200 Grams (Greenlime Btr 200Grm (With Core) 10�11Cm, 2Ply 18Gsm)-1 Box 100/60 Roll (PUDUMJEE)",
+                "spec": "PUDUMJEE",
+                "image": "https://placehold.co/160x160/E5E7EB/6B7280?text=Item+Image"
+            },
+            {
+                "name": "M-Fold White 21 x 22.5, 150 Sheets, Greenlime Pudumjee Product Code: 01410057 (1 Case = 60 Pkts x 150 Pulls / Sheets) (PUDUMJEE)",
+                "spec": "PUDUMJEE",
+                "image": "https://placehold.co/160x160/E5E7EB/6B7280?text=Item+Image"
+            },
+            {
+                "name": "JRT Dispenser Roll Greenlime 250Mtr (Greenlime Jrt, White 3.8\"(97Mm) 250Mtr 1 Nos (24Cc) 36Gsm) (PUDUMJEE)",
+                "spec": "PUDUMJEE",
+                "image": "https://placehold.co/160x160/E5E7EB/6B7280?text=Item+Image"
+            },
+            {
+                "name": "Greenlime Facial Tissue 100 Pulls (Greenlime Ft Box, Plain 20X20, Ply 100 Pulls 1 Nos (80Cc) 15Gsm) (PUDUMJEE)",
+                "spec": "PUDUMJEE",
+                "image": "https://placehold.co/160x160/E5E7EB/6B7280?text=Item+Image"
+            },
+            {
+                "name": "Cube Napkin, 1 Ply, CB001, 21cm x 27cm, 1 Box 100 Pkts (Saraya Mystair)",
+                "spec": "Saraya Mystair",
+                "image": "https://placehold.co/160x160/E5E7EB/6B7280?text=Item+Image"
+            },
+            {
+                "name": "Dispensor Jumbo Roll Scott Kimberly (KIMBERLY)",
+                "spec": "KIMBERLY",
+                "image": "https://placehold.co/160x160/E5E7EB/6B7280?text=Item+Image"
+            }
+        ]
+    },
+    {
+        "name": "Hand Hygiene & Fresheners",
+        "id": "hand-hygiene-fresheners",
+        "products": [
+            {
+                "name": "Scott Lux Foam Soap Refill - 30895, For Hand Wash - Kimberly Clark) 1Box = 6 Btl of 1 Ltrs) (KIMBERLY)",
+                "spec": "KIMBERLY",
+                "image": "https://placehold.co/160x160/E5E7EB/6B7280?text=Item+Image"
+            },
+            {
+                "name": "30912 Kimberly Clark Scott Instant Hand Sanitizer - 5 Ltrs Can (1 Case = 4 Can) (KIMBERLY)",
+                "spec": "KIMBERLY",
+                "image": "https://placehold.co/160x160/E5E7EB/6B7280?text=Item+Image"
+            },
+            {
+                "name": "Hand Sanitizer Buzil Rossari Liquid - 5 Ltrs Can, Ethanol Base (Buzil Rossari)",
+                "spec": "Buzil Rossari",
+                "image": "https://placehold.co/160x160/E5E7EB/6B7280?text=Item+Image"
+            },
+            {
+                "name": "01267 KIMBERLY-CLARK PROF GENTLE CLEAN (1 Box = 2 Can / 5 Ltr) (KIMBERLY)",
+                "spec": "KIMBERLY",
+                "image": "https://placehold.co/160x160/E5E7EB/6B7280?text=Item+Image"
+            },
+            {
+                "name": "Greenlime/Jade Air Freshner Refill 10MI (Greenlime 70Grm/100 MI) (PUDUMJEE / JADE)",
+                "spec": "PUDUMJEE / JADE",
+                "image": "https://placehold.co/160x160/E5E7EB/6B7280?text=Item+Image"
+            },
+            {
+                "name": "Micromist Refill 100ml (Mystair)",
+                "spec": "Mystair",
+                "image": "https://placehold.co/160x160/E5E7EB/6B7280?text=Item+Image"
+            },
+            {
+                "name": "Hygiene Fresh Micromist Dispenser (Hygiene Fresh)",
+                "spec": "Hygiene Fresh",
+                "image": "https://placehold.co/160x160/E5E7EB/6B7280?text=Item+Image"
+            },
+            {
+                "name": "Hygiene Fresh Refill 200ml (Hygiene Fresh)",
+                "spec": "Hygiene Fresh",
+                "image": "https://placehold.co/160x160/E5E7EB/6B7280?text=Item+Image"
+            },
+            {
+                "name": "Godrej Aer Pocket Air Fragrance 10Gm (Godrej)",
+                "spec": "Godrej",
+                "image": "https://placehold.co/160x160/E5E7EB/6B7280?text=Item+Image"
+            },
+            {
+                "name": "Odonil Room Freshner 50gm (Dabour/Good Home Scenton)",
+                "spec": "Dabour/Good Home Scenton",
+                "image": "https://placehold.co/160x160/E5E7EB/6B7280?text=Item+Image"
+            },
+            {
+                "name": "Room Freshner Bottle 217ml (Premium / Lia)",
+                "spec": "Premium / Lia",
+                "image": "https://placehold.co/160x160/E5E7EB/6B7280?text=Item+Image"
+            },
+            {
+                "name": "Room Freshener Ambi Pur 275Grm (Ambi Pur)",
+                "spec": "Ambi Pur",
+                "image": "https://placehold.co/160x160/E5E7EB/6B7280?text=Item+Image"
+            },
+            {
+                "name": "Reva Sense Room Freshener 5 Ltrs Pack (Reva Sense)",
+                "spec": "Reva Sense",
+                "image": "https://placehold.co/160x160/E5E7EB/6B7280?text=Item+Image"
+            },
+            {
+                "name": "Fresh Think Room Freshener 300 ml (Fresh Think)",
+                "spec": "Fresh Think",
+                "image": "https://placehold.co/160x160/E5E7EB/6B7280?text=Item+Image"
+            },
+            {
+                "name": "Cosmella Room Freshener 310 ml (Cosmella)",
+                "spec": "Cosmella",
+                "image": "https://placehold.co/160x160/E5E7EB/6B7280?text=Item+Image"
+            },
+            {
+                "name": "Ambipure Room Freshener 275 gm (Ambipure)",
+                "spec": "Ambipure",
+                "image": "https://placehold.co/160x160/E5E7EB/6B7280?text=Item+Image"
+            },
+            {
+                "name": "Hygiene Fresh Air Freshener 300 ml (Hygiene Fresh)",
+                "spec": "Hygiene Fresh",
+                "image": "https://placehold.co/160x160/E5E7EB/6B7280?text=Item+Image"
+            },
+            {
+                "name": "Pour Home Room Freshener 270 ml (Pour Home)",
+                "spec": "Pour Home",
+                "image": "https://placehold.co/160x160/E5E7EB/6B7280?text=Item+Image"
+            },
+            {
+                "name": "Lia Room Freshener 140gm (Lia)",
+                "spec": "Lia",
+                "image": "https://placehold.co/160x160/E5E7EB/6B7280?text=Item+Image"
+            },
+            {
+                "name": "Odonil Room Freshener 240ml (Dabur)",
+                "spec": "Dabur",
+                "image": "https://placehold.co/160x160/E5E7EB/6B7280?text=Item+Image"
+            },
+            {
+                "name": "Godrej Room Freshener (Godrej)",
+                "spec": "Godrej",
+                "image": "https://placehold.co/160x160/E5E7EB/6B7280?text=Item+Image"
+            },
+            {
+                "name": "Dettol Liquid Handwash - 5 Ltrs Pack (Reckitt Benckiser)",
+                "spec": "Reckitt Benckiser",
+                "image": "https://placehold.co/160x160/E5E7EB/6B7280?text=Item+Image"
+            },
+            {
+                "name": "Lifebuoy Handwash - 5 Ltrs Pack (Hindustan Unilever)",
+                "spec": "Hindustan Unilever",
+                "image": "https://placehold.co/160x160/E5E7EB/6B7280?text=Item+Image"
+            },
+            {
+                "name": "Savlon Handwash - 5 Ltrs Pack (Reckitt Benckiser)",
+                "spec": "Reckitt Benckiser",
+                "image": "https://placehold.co/160x160/E5E7EB/6B7280?text=Item+Image"
+            },
+            {
+                "name": "Origami Handwash 5 Ltrs Refill / Pouch (Origami)",
+                "spec": "Origami",
+                "image": "https://placehold.co/160x160/E5E7EB/6B7280?text=Item+Image"
+            },
+            {
+                "name": "Nerokem Glanz Pink - 5 Ltrs Can (Nerokem)",
+                "spec": "Nerokem",
+                "image": "https://placehold.co/160x160/E5E7EB/6B7280?text=Item+Image"
+            },
+            {
+                "name": "Pudumjee Greenlime Hand Wash 5 Ltrs Can (PUDUMJEE)",
+                "spec": "PUDUMJEE",
+                "image": "https://placehold.co/160x160/E5E7EB/6B7280?text=Item+Image"
+            },
+            {
+                "name": "Diversey Blossom Handwash - 5 Ltrs Can (Diversey)",
+                "spec": "Diversey",
+                "image": "https://placehold.co/160x160/E5E7EB/6B7280?text=Item+Image"
+            },
+            {
+                "name": "FEM HANDWASH LIQUID - 5 LTRS CAN (FEM)",
+                "spec": "FEM",
+                "image": "https://placehold.co/160x160/E5E7EB/6B7280?text=Item+Image"
+            },
+            {
+                "name": "Hand Wash 5 Ltr With Msds Certificate (Nerokem)",
+                "spec": "Nerokem",
+                "image": "https://placehold.co/160x160/E5E7EB/6B7280?text=Item+Image"
+            },
+            {
+                "name": "Hand Wash 5 Ltr (Pink)",
+                "spec": "Pink",
+                "image": "https://placehold.co/160x160/E5E7EB/6B7280?text=Item+Image"
+            },
+            {
+                "name": "Hand Wash Liquid Fem 1 Ltr Pink (Dabur)",
+                "spec": "Dabur",
+                "image": "https://placehold.co/160x160/E5E7EB/6B7280?text=Item+Image"
+            },
+            {
+                "name": "Dettol Handwash 900 Ml Original Bottle (Reckitt Benckiser)",
+                "spec": "Reckitt Benckiser",
+                "image": "https://placehold.co/160x160/E5E7EB/6B7280?text=Item+Image"
+            },
+            {
+                "name": "Dettol Handwash 5 Ltrs Can (Reckitt Benckiser)",
+                "spec": "Reckitt Benckiser",
+                "image": "https://placehold.co/160x160/E5E7EB/6B7280?text=Item+Image"
+            }
+        ]
+    },
+    {
+        "name": "Cleaning Cloths & Masks",
+        "id": "cleaning-cloths-masks",
+        "products": [
+            {
+                "name": "Check Duster Red/Blue/Green Medium (Good Quaity- 18 X 18)",
+                "spec": "Good Quaity- 18 X 18",
+                "image": "https://placehold.co/160x160/E5E7EB/6B7280?text=Item+Image"
+            },
+            {
+                "name": "Glass Duster Red / Blue, 22\"X 22\" (Good Quality 22 X 22)",
+                "spec": "Good Quality 22 X 22",
+                "image": "https://placehold.co/160x160/E5E7EB/6B7280?text=Item+Image"
+            },
+            {
+                "name": "Glass Duster Red / Blue, 18\"X 18\" (Good Quality 18 X 18)",
+                "spec": "Good Quality 18 X 18",
+                "image": "https://placehold.co/160x160/E5E7EB/6B7280?text=Item+Image"
+            },
+            {
+                "name": "Check Duster Red/Blue/Green Big (Good Quality - 16X24)",
+                "spec": "Good Quality - 16X24",
+                "image": "https://placehold.co/160x160/E5E7EB/6B7280?text=Item+Image"
+            },
+            {
+                "name": "Cotton Floor Dusters / Rough Duster (Good Quality 24\" X 24\")",
+                "spec": "Good Quality 24\" X 24\"",
+                "image": "https://placehold.co/160x160/E5E7EB/6B7280?text=Item+Image"
+            },
+            {
+                "name": "Cotton Floor Dusters / Rough Duster (Good Quality 20\" X 20\")",
+                "spec": "Good Quality 20\" X 20\"",
+                "image": "https://placehold.co/160x160/E5E7EB/6B7280?text=Item+Image"
+            },
+            {
+                "name": "Micro Wipe (40 Cm X 40 Cm) Light Duty (China Brand)",
+                "spec": "China Brand",
+                "image": "https://placehold.co/160x160/E5E7EB/6B7280?text=Item+Image"
+            },
+            {
+                "name": "Micro Wipe (40 Cm X 40 Cm) 200 Light Duty (Unger Brand)",
+                "spec": "Unger Brand",
+                "image": "https://placehold.co/160x160/E5E7EB/6B7280?text=Item+Image"
+            },
+            {
+                "name": "Micro Wipe (40 Cm X 40 Cm) 500 Medium Duty (Unger Brand)",
+                "spec": "Unger Brand",
+                "image": "https://placehold.co/160x160/E5E7EB/6B7280?text=Item+Image"
+            },
+            {
+                "name": "Diversey Micro Fiber Duster (40 Cm X 40 Cm) (Diversey)",
+                "spec": "Diversey",
+                "image": "https://placehold.co/160x160/E5E7EB/6B7280?text=Item+Image"
+            },
+            {
+                "name": "Yellow Duster 12\" X 18\" (Good Quality 12\" X 18\")",
+                "spec": "Good Quality 12\" X 18\"",
+                "image": "https://placehold.co/160x160/E5E7EB/6B7280?text=Item+Image"
+            },
+            {
+                "name": "Face Mask (Disposiable)",
+                "spec": "Disposiable",
+                "image": "https://placehold.co/160x160/E5E7EB/6B7280?text=Item+Image"
+            },
+            {
+                "name": "Nose Mask Yellow / N 95 (Disposiable)",
+                "spec": "Disposiable",
+                "image": "https://placehold.co/160x160/E5E7EB/6B7280?text=Item+Image"
+            },
+            {
+                "name": "Anti Pollution Hosiery Mask (Washable)",
+                "spec": "Washable",
+                "image": "https://placehold.co/160x160/E5E7EB/6B7280?text=Item+Image"
+            },
+            {
+                "name": "Washable Face Mask (three Layer) Reusable (B Layer)",
+                "spec": "B Layer",
+                "image": "https://placehold.co/160x160/E5E7EB/6B7280?text=Item+Image"
+            },
+            {
+                "name": "Microfiber Duster 40x40 (Red/Green/Yellow/Blue) (Quality Hygiene)",
+                "spec": "Quality Hygiene",
+                "image": "https://placehold.co/160x160/E5E7EB/6B7280?text=Item+Image"
+            },
+            {
+                "name": "Microfiber Wool Duster with Telescope Rod (Quality Hygiene)",
+                "spec": "Quality Hygiene",
+                "image": "https://placehold.co/160x160/E5E7EB/6B7280?text=Item+Image"
+            },
+            {
+                "name": "Feather Brush Mix color (imported)",
+                "spec": "imported",
+                "image": "https://placehold.co/160x160/E5E7EB/6B7280?text=Item+Image"
+            },
+            {
+                "name": "Acrylic Thread Dusting Feather brush (Any as per available) (Quality Hygiene)",
+                "spec": "Quality Hygiene",
+                "image": "https://placehold.co/160x160/E5E7EB/6B7280?text=Item+Image"
+            },
+            {
+                "name": "Safety Goggles (Good Quality)",
+                "spec": "Good Quality",
+                "image": "https://placehold.co/160x160/E5E7EB/6B7280?text=Item+Image"
+            }
+        ]
+    },
+    {
+        "name": "Mops & Brushes",
+        "id": "mops-brushes",
+        "products": [
+            {
+                "name": "Wet Mop Set With Alluminium Stick (Heavy Duty Full Set)",
+                "spec": "Heavy Duty Full Set",
+                "image": "https://placehold.co/160x160/E5E7EB/6B7280?text=Item+Image"
+            },
+            {
+                "name": "Wet Mop Set With M.S. Stick (Good Quality Gala)",
+                "spec": "Good Quality Gala",
+                "image": "https://placehold.co/160x160/E5E7EB/6B7280?text=Item+Image"
+            },
+            {
+                "name": "Wet Mop Stick MS Heavy Duty (Heavy Duty)",
+                "spec": "Heavy Duty",
+                "image": "https://placehold.co/160x160/E5E7EB/6B7280?text=Item+Image"
+            },
+            {
+                "name": "Wet Mop Refill 300 gm White, Red, Blue Spl Cut End (Good Quality)",
+                "spec": "Good Quality",
+                "image": "https://placehold.co/160x160/E5E7EB/6B7280?text=Item+Image"
+            },
+            {
+                "name": "Wet Mop Refill 250gm, 6\" (Generic)",
+                "spec": "Generic",
+                "image": "https://placehold.co/160x160/E5E7EB/6B7280?text=Item+Image"
+            },
+            {
+                "name": "Round Wet Mop Set With M.S. / Wooden Stick (Good Quality)",
+                "spec": "Good Quality",
+                "image": "https://placehold.co/160x160/E5E7EB/6B7280?text=Item+Image"
+            },
+            {
+                "name": "Hard T Brush Set (Gala/Gebi/Vigo / Amco)",
+                "spec": "Gala/Gebi/Vigo / Amco",
+                "image": "https://placehold.co/160x160/E5E7EB/6B7280?text=Item+Image"
+            },
+            {
+                "name": "Floor Scrubbing Brush 12\" Hard (Generic)",
+                "spec": "Generic",
+                "image": "https://placehold.co/160x160/E5E7EB/6B7280?text=Item+Image"
+            },
+            {
+                "name": "Hard Brush Set 2X18\" (Alluminium Brush)",
+                "spec": "Alluminium Brush",
+                "image": "https://placehold.co/160x160/E5E7EB/6B7280?text=Item+Image"
+            },
+            {
+                "name": "Mr. Tall Brush with Metal Stick (Local)",
+                "spec": "Local",
+                "image": "https://placehold.co/160x160/E5E7EB/6B7280?text=Item+Image"
+            },
+            {
+                "name": "Carpet Brush Prince Hard / soft (Good Quaity)",
+                "spec": "Good Quaity",
+                "image": "https://placehold.co/160x160/E5E7EB/6B7280?text=Item+Image"
+            },
+            {
+                "name": "Cob Web Brush (Good Quaity)",
+                "spec": "Good Quaity",
+                "image": "https://placehold.co/160x160/E5E7EB/6B7280?text=Item+Image"
+            },
+            {
+                "name": "Dry Mop Compleate Set Blue (24\")",
+                "spec": "24\"",
+                "image": "https://placehold.co/160x160/E5E7EB/6B7280?text=Item+Image"
+            },
+            {
+                "name": "Dry Mop Frame 24\" (24\")",
+                "spec": "24\"",
+                "image": "https://placehold.co/160x160/E5E7EB/6B7280?text=Item+Image"
+            },
+            {
+                "name": "Dry Mop Frame 24\" /2Ft (24\"/2Ft)",
+                "spec": "24\"/2Ft",
+                "image": "https://placehold.co/160x160/E5E7EB/6B7280?text=Item+Image"
+            },
+            {
+                "name": "Plastic Floor Wiper 12\" (Gala 12\")",
+                "spec": "Gala 12\"",
+                "image": "https://placehold.co/160x160/E5E7EB/6B7280?text=Item+Image"
+            },
+            {
+                "name": "Plastic Wiper 18\" (Good Quality)",
+                "spec": "Good Quality",
+                "image": "https://placehold.co/160x160/E5E7EB/6B7280?text=Item+Image"
+            },
+            {
+                "name": "Floor Wiper Plastic 16\" Without Handle (Generic)",
+                "spec": "Generic",
+                "image": "https://placehold.co/160x160/E5E7EB/6B7280?text=Item+Image"
+            },
+            {
+                "name": "Floor Wiper Plastic 21\" Without Handle (Generic)",
+                "spec": "Generic",
+                "image": "https://placehold.co/160x160/E5E7EB/6B7280?text=Item+Image"
+            },
+            {
+                "name": "Floor Squeeze/ Floor Wiper Set 24\" (24\")",
+                "spec": "24\"",
+                "image": "https://placehold.co/160x160/E5E7EB/6B7280?text=Item+Image"
+            },
+            {
+                "name": "Floor Squeeze Wiper (Only Head) (55cm Roots)",
+                "spec": "55cm Roots",
+                "image": "https://placehold.co/160x160/E5E7EB/6B7280?text=Item+Image"
+            },
+            {
+                "name": "Double Rubber Wiper 55cm W/O Handle (NGM 22\")",
+                "spec": "NGM 22\"",
+                "image": "https://placehold.co/160x160/E5E7EB/6B7280?text=Item+Image"
+            },
+            {
+                "name": "Floor Wiper without Stick (22\" (Taj Brand))",
+                "spec": "22\" (Taj Brand)",
+                "image": "https://placehold.co/160x160/E5E7EB/6B7280?text=Item+Image"
+            },
+            {
+                "name": "Floor Wiper Full Set (24\" (Taj Brand))",
+                "spec": "24\" (Taj Brand)",
+                "image": "https://placehold.co/160x160/E5E7EB/6B7280?text=Item+Image"
+            },
+            {
+                "name": "Floor Squeeze/ Floor Wiper Set Plastic 18\" (18\" single Foam)",
+                "spec": "18\" single Foam",
+                "image": "https://placehold.co/160x160/E5E7EB/6B7280?text=Item+Image"
+            },
+            {
+                "name": "Multi Purpose Brush (Cowb Web Brush Only)",
+                "spec": "Cowb Web Brush Only",
+                "image": "https://placehold.co/160x160/E5E7EB/6B7280?text=Item+Image"
+            },
+            {
+                "name": "Window Washer 35 Cm (B5 Cm)",
+                "spec": "B5 Cm",
+                "image": "https://placehold.co/160x160/E5E7EB/6B7280?text=Item+Image"
+            },
+            {
+                "name": "Window Washer Spare (Sleev 35Cm)",
+                "spec": "Sleev 35Cm",
+                "image": "https://placehold.co/160x160/E5E7EB/6B7280?text=Item+Image"
+            },
+            {
+                "name": "Floor Scrapper M.S. With Handel (4)",
+                "spec": "4",
+                "image": "https://placehold.co/160x160/E5E7EB/6B7280?text=Item+Image"
+            },
+            {
+                "name": "Toilet Brush with Container (Gala)",
+                "spec": "Gala",
+                "image": "https://placehold.co/160x160/E5E7EB/6B7280?text=Item+Image"
+            },
+            {
+                "name": "Hocky Brush / Round Toilet Brush (Hocky Brush For Toilet)",
+                "spec": "Hocky Brush For Toilet",
+                "image": "https://placehold.co/160x160/E5E7EB/6B7280?text=Item+Image"
+            },
+            {
+                "name": "Corner Brush (Hand Corner Brush)",
+                "spec": "Hand Corner Brush",
+                "image": "https://placehold.co/160x160/E5E7EB/6B7280?text=Item+Image"
+            },
+            {
+                "name": "S-SQUEGEE, 35 cm, SH35H (Unger Brand)",
+                "spec": "Unger Brand",
+                "image": "https://placehold.co/160x160/E5E7EB/6B7280?text=Item+Image"
+            },
+            {
+                "name": "Dry Mop Set White 18\" Taj (Taj Brand)",
+                "spec": "Taj Brand",
+                "image": "https://placehold.co/160x160/E5E7EB/6B7280?text=Item+Image"
+            },
+            {
+                "name": "Dry Mop Refill White 2 Ft Taj (Taj Brand)",
+                "spec": "Taj Brand",
+                "image": "https://placehold.co/160x160/E5E7EB/6B7280?text=Item+Image"
+            },
+            {
+                "name": "Acrylic Dry Mop Blue 24\"(Bracket & Refill Without Stick) (Quality Hygiene)",
+                "spec": "Quality Hygiene",
+                "image": "https://placehold.co/160x160/E5E7EB/6B7280?text=Item+Image"
+            },
+            {
+                "name": "Microfibre Dry Mop Set 60CM (Colour Option available Blue/Red/Green) (Quality Hygiene)",
+                "spec": "Quality Hygiene",
+                "image": "https://placehold.co/160x160/E5E7EB/6B7280?text=Item+Image"
+            },
+            {
+                "name": "Double Foam Wiper 55 cm (Quality Hygiene)",
+                "spec": "Quality Hygiene",
+                "image": "https://placehold.co/160x160/E5E7EB/6B7280?text=Item+Image"
+            },
+            {
+                "name": "Microfibre Refill 60 cm Colour Code Welcro (Quality Hygiene)",
+                "spec": "Quality Hygiene",
+                "image": "https://placehold.co/160x160/E5E7EB/6B7280?text=Item+Image"
+            },
+            {
+                "name": "Floor Wiper With Brush (Quality Hygiene)",
+                "spec": "Quality Hygiene",
+                "image": "https://placehold.co/160x160/E5E7EB/6B7280?text=Item+Image"
+            },
+            {
+                "name": "Dry Mop Refill (Red/Blue/Yellow/Green) (Quality Hygiene)",
+                "spec": "Quality Hygiene",
+                "image": "https://placehold.co/160x160/E5E7EB/6B7280?text=Item+Image"
+            },
+            {
+                "name": "HARD BRUSH 12\" With Mild Steel Handle (Red Green / Yellow / Blue) (Quality Hygiene)",
+                "spec": "Quality Hygiene",
+                "image": "https://placehold.co/160x160/E5E7EB/6B7280?text=Item+Image"
+            },
+            {
+                "name": "SWEEPER BRUSH 18\" BLACK WITH BLACK MS STICK (Quality Hygiene)",
+                "spec": "Quality Hygiene",
+                "image": "https://placehold.co/160x160/E5E7EB/6B7280?text=Item+Image"
+            },
+            {
+                "name": "Carpet Brush / Hand Brush (Red/Green/Yellow/Blue/Dark Grey) (Quality Hygiene)",
+                "spec": "Quality Hygiene",
+                "image": "https://placehold.co/160x160/E5E7EB/6B7280?text=Item+Image"
+            },
+            {
+                "name": "Hard Bristal Brush 18\" White With Blue Brister And Alluminium Stick (WHITE/BLUE) (Quality Hygiene)",
+                "spec": "Quality Hygiene",
+                "image": "https://placehold.co/160x160/E5E7EB/6B7280?text=Item+Image"
+            },
+            {
+                "name": "Carpet Brush (Quality Hygiene)",
+                "spec": "Quality Hygiene",
+                "image": "https://placehold.co/160x160/E5E7EB/6B7280?text=Item+Image"
+            },
+            {
+                "name": "Floor Wiper 55 cm / Squeezer (Double Foam Black Colour) Remark - Squeezee Frame Grey Colour.Only for Knob Colour Coading Option Available (Red/Green/Yellow/Blue/Dark Grey) (Quality Hygiene)",
+                "spec": "Quality Hygiene",
+                "image": "https://placehold.co/160x160/E5E7EB/6B7280?text=Item+Image"
+            },
+            {
+                "name": "Soft Broom Gala (Gala)",
+                "spec": "Gala",
+                "image": "https://placehold.co/160x160/E5E7EB/6B7280?text=Item+Image"
+            },
+            {
+                "name": "Microfiber Wet Mop Set Colour Coded (Red/Green/Yellow/Blue) (Quality Hygiene)",
+                "spec": "Quality Hygiene",
+                "image": "https://placehold.co/160x160/E5E7EB/6B7280?text=Item+Image"
+            },
+            {
+                "name": "Microfibar Wet Mop Reffile (Red/Green/Yellow/Blue) (Quality Hygiene)",
+                "spec": "Quality Hygiene",
+                "image": "https://placehold.co/160x160/E5E7EB/6B7280?text=Item+Image"
+            },
+            {
+                "name": "Wet Mop Reffile Cotton Grey 350 gm (Grey) (Quality Hygiene)",
+                "spec": "Quality Hygiene",
+                "image": "https://placehold.co/160x160/E5E7EB/6B7280?text=Item+Image"
+            },
+            {
+                "name": "Wet Mop Reffile Cotton 400 gm (White) (Quality Hygiene)",
+                "spec": "Quality Hygiene",
+                "image": "https://placehold.co/160x160/E5E7EB/6B7280?text=Item+Image"
+            },
+            {
+                "name": "Wet Mop Reffile Cotton 350 gm (Red/Green/Yellow/Blue) (Quality Hygiene)",
+                "spec": "Quality Hygiene",
+                "image": "https://placehold.co/160x160/E5E7EB/6B7280?text=Item+Image"
+            },
+            {
+                "name": "Wet Mop Set Cotton With Mild Steel Stick (Red/Green/Yellow/Blue) (Quality Hygiene)",
+                "spec": "Quality Hygiene",
+                "image": "https://placehold.co/160x160/E5E7EB/6B7280?text=Item+Image"
+            },
+            {
+                "name": "Wet Mop Bracket (Red/Green/Yellow/Blue) (Quality Hygiene)",
+                "spec": "Quality Hygiene",
+                "image": "https://placehold.co/160x160/E5E7EB/6B7280?text=Item+Image"
+            },
+            {
+                "name": "Wet Mop Bracket Heavy Duty (Black / Grey) (Gala)",
+                "spec": "Gala",
+                "image": "https://placehold.co/160x160/E5E7EB/6B7280?text=Item+Image"
+            },
+            {
+                "name": "Wet Mop Bracket (Generic)",
+                "spec": "Generic",
+                "image": "https://placehold.co/160x160/E5E7EB/6B7280?text=Item+Image"
+            },
+            {
+                "name": "Alluminium Handle (Red/Green/Yellow/Blue Grip) (Quality Hygiene)",
+                "spec": "Quality Hygiene",
+                "image": "https://placehold.co/160x160/E5E7EB/6B7280?text=Item+Image"
+            },
+            {
+                "name": "Aluminium Handle With Thread (Local)",
+                "spec": "Local",
+                "image": "https://placehold.co/160x160/E5E7EB/6B7280?text=Item+Image"
+            },
+            {
+                "name": "MS Stick Colour Code (Quality Hygiene)",
+                "spec": "Quality Hygiene",
+                "image": "https://placehold.co/160x160/E5E7EB/6B7280?text=Item+Image"
+            },
+            {
+                "name": "Dry Mop Set 75 cm Ezee (Blue n gray Thread) (Ezee / Roots)",
+                "spec": "Ezee / Roots",
+                "image": "https://placehold.co/160x160/E5E7EB/6B7280?text=Item+Image"
+            },
+            {
+                "name": "Dry Mop Set 75 cm Ezee reffile (Ezee)",
+                "spec": "Ezee",
+                "image": "https://placehold.co/160x160/E5E7EB/6B7280?text=Item+Image"
+            },
+            {
+                "name": "Eze Dry Mop Set 50 Cm Roots (Ezee / Roots)",
+                "spec": "Ezee / Roots",
+                "image": "https://placehold.co/160x160/E5E7EB/6B7280?text=Item+Image"
+            },
+            {
+                "name": "Eze Dry Mop Refill 50 Cm Roots (Ezee / Roots)",
+                "spec": "Ezee / Roots",
+                "image": "https://placehold.co/160x160/E5E7EB/6B7280?text=Item+Image"
+            },
+            {
+                "name": "Hard Broom Jumbo Big (Generic)",
+                "spec": "Generic",
+                "image": "https://placehold.co/160x160/E5E7EB/6B7280?text=Item+Image"
+            },
+            {
+                "name": "Soft Broom (Generic)",
+                "spec": "Generic",
+                "image": "https://placehold.co/160x160/E5E7EB/6B7280?text=Item+Image"
+            },
+            {
+                "name": "Floor Squeezee 55cm - IPC (IPC)",
+                "spec": "IPC",
+                "image": "https://placehold.co/160x160/E5E7EB/6B7280?text=Item+Image"
+            },
+            {
+                "name": "WS 750 Floor Squeezee 75cm - IPC (IPC)",
+                "spec": "IPC",
+                "image": "https://placehold.co/160x160/E5E7EB/6B7280?text=Item+Image"
+            }
+        ]
+    },
+    {
+        "name": "Buckets & Dustbins",
+        "id": "buckets-dustbins",
+        "products": [
+            {
+                "name": "Plastic Buckets 20 Ltrs. Virgin Plastic (Milan/Pawan/ Ratan)",
+                "spec": "Milan/Pawan/ Ratan",
+                "image": "https://placehold.co/160x160/E5E7EB/6B7280?text=Item+Image"
+            },
+            {
+                "name": "Plastic Buckets 16 Ltrs. Virgin Plastic (Milan/Pawan / Ratan)",
+                "spec": "Milan/Pawan / Ratan",
+                "image": "https://placehold.co/160x160/E5E7EB/6B7280?text=Item+Image"
+            },
+            {
+                "name": "Plastic Buckets 10 Ltrs. Recycle Plastic (Milan/Pawan/ Ratan)",
+                "spec": "Milan/Pawan/ Ratan",
+                "image": "https://placehold.co/160x160/E5E7EB/6B7280?text=Item+Image"
+            },
+            {
+                "name": "Plastic Buckets 5 Ltrs. Virgin Plastic (Milan/Pawan/ Ratan)",
+                "spec": "Milan/Pawan/ Ratan",
+                "image": "https://placehold.co/160x160/E5E7EB/6B7280?text=Item+Image"
+            },
+            {
+                "name": "Wheel Dust Bin 120 Ltr H.D. Brand-Aristo (Red/Green/Yellow/ Blue Colour)",
+                "spec": "Red/Green/Yellow/ Blue Colour",
+                "image": "https://placehold.co/160x160/E5E7EB/6B7280?text=Item+Image"
+            },
+            {
+                "name": "Wheel Dust Bin 260 Ltr H.D. Brand- Aristo (Red/Green/Yellow/ Blue Colour)",
+                "spec": "Red/Green/Yellow/ Blue Colour",
+                "image": "https://placehold.co/160x160/E5E7EB/6B7280?text=Item+Image"
+            },
+            {
+                "name": "Plastic Big Dust Bin / Drum 100 Ltr With Flat Flap/LID (Red/Green/Yellow/ Blue Colour)",
+                "spec": "Red/Green/Yellow/ Blue Colour",
+                "image": "https://placehold.co/160x160/E5E7EB/6B7280?text=Item+Image"
+            },
+            {
+                "name": "Pawan/Milan Dust Bin With Flap Capacity 80 Ltr (Red/Green/Yellow/ Blue Colour)",
+                "spec": "Red/Green/Yellow/ Blue Colour",
+                "image": "https://placehold.co/160x160/E5E7EB/6B7280?text=Item+Image"
+            },
+            {
+                "name": "Pawan/Milan Dust Bin / Drum With Flap / LID Capacity 50 Ltr (Red/Green/Yellow/ Blue Colour)",
+                "spec": "Red/Green/Yellow/ Blue Colour",
+                "image": "https://placehold.co/160x160/E5E7EB/6B7280?text=Item+Image"
+            },
+            {
+                "name": "Pawan/Milan Dust Bin With Flap Capacity 30 Ltr (Black Colour Availabale)",
+                "spec": "Black Colour Availabale",
+                "image": "https://placehold.co/160x160/E5E7EB/6B7280?text=Item+Image"
+            },
+            {
+                "name": "Nakoda Brand Rectangular Dust Bin Capacity 50 Ltr. (Red/Green/Yellow/ Blue Colour)",
+                "spec": "Red/Green/Yellow/ Blue Colour",
+                "image": "https://placehold.co/160x160/E5E7EB/6B7280?text=Item+Image"
+            },
+            {
+                "name": "Nakoda Brand Rectangular Dust Bin Capacity- 30 Ltr. (Red/Green/Yellow/ Blue Colour)",
+                "spec": "Red/Green/Yellow/ Blue Colour",
+                "image": "https://placehold.co/160x160/E5E7EB/6B7280?text=Item+Image"
+            },
+            {
+                "name": "Dust Bin With Lid Brand-Milan/Pawan -10 Ltr (Red/Green/Yellow/ Blue Colour)",
+                "spec": "Red/Green/Yellow/ Blue Colour",
+                "image": "https://placehold.co/160x160/E5E7EB/6B7280?text=Item+Image"
+            },
+            {
+                "name": "Peddale Dust Bin 10 Ltr Brand Pawan/Milan (Gray/Pink/Cream/ Red/Green/ Yellow/Blue Colour)",
+                "spec": "Gray/Pink/Cream/ Red/Green/ Yellow/Blue Colour",
+                "image": "https://placehold.co/160x160/E5E7EB/6B7280?text=Item+Image"
+            },
+            {
+                "name": "SS Swing Bin 10 X 24 (Steel)",
+                "spec": "Steel",
+                "image": "https://placehold.co/160x160/E5E7EB/6B7280?text=Item+Image"
+            },
+            {
+                "name": "Peddle Dust Bin 10 Ltr Brand Pawan/Milan (Gray/Pink/Cream/ Red/Green/ Yellow/Blue Colour)",
+                "spec": "Gray/Pink/Cream/ Red/Green/ Yellow/Blue Colour",
+                "image": "https://placehold.co/160x160/E5E7EB/6B7280?text=Item+Image"
+            },
+            {
+                "name": "Mug Plastic (1 Ltrs)",
+                "spec": "1 Ltrs",
+                "image": "https://placehold.co/160x160/E5E7EB/6B7280?text=Item+Image"
+            },
+            {
+                "name": "Basket Caddy (Pawan)",
+                "spec": "Pawan",
+                "image": "https://placehold.co/160x160/E5E7EB/6B7280?text=Item+Image"
+            },
+            {
+                "name": "20 Ltr Moping Trolly (Evreyday Make)",
+                "spec": "Evreyday Make",
+                "image": "https://placehold.co/160x160/E5E7EB/6B7280?text=Item+Image"
+            },
+            {
+                "name": "Wringer Bucket Trolly (34Ltr) (imported)",
+                "spec": "imported",
+                "image": "https://placehold.co/160x160/E5E7EB/6B7280?text=Item+Image"
+            },
+            {
+                "name": "Garbage Bag Black 19 X 21, 1 Pkt=25 Pc (Small Bag)",
+                "spec": "Small Bag",
+                "image": "https://placehold.co/160x160/E5E7EB/6B7280?text=Item+Image"
+            },
+            {
+                "name": "Garbage Bag Big 30 X 50 Back 1 Pkt= 10 Pc Virgine Bag (Virgine Black)",
+                "spec": "Virgine Black",
+                "image": "https://placehold.co/160x160/E5E7EB/6B7280?text=Item+Image"
+            },
+            {
+                "name": "Garbage Bag Big 29 X 39 Green Biodegradable (Virgine Green Certified)",
+                "spec": "Virgine Green Certified",
+                "image": "https://placehold.co/160x160/E5E7EB/6B7280?text=Item+Image"
+            },
+            {
+                "name": "50 Micron Biodegradable Green Garbage Bag Size : 19 X 21 (Virgine Green Certified)",
+                "spec": "Virgine Green Certified",
+                "image": "https://placehold.co/160x160/E5E7EB/6B7280?text=Item+Image"
+            },
+            {
+                "name": "50 Micron Biodegradable Green Garbage Bag Size : 30 X 50 (Virgine Green Certified)",
+                "spec": "Virgine Green Certified",
+                "image": "https://placehold.co/160x160/E5E7EB/6B7280?text=Item+Image"
+            },
+            {
+                "name": "Garbage Bag Bio Green print 40X50 51 Micron (Toja / Recycle)",
+                "spec": "Toja / Recycle",
+                "image": "https://placehold.co/160x160/E5E7EB/6B7280?text=Item+Image"
+            },
+            {
+                "name": "Garbage Bag Bio Green print 25X30 51Micron (Toja / Recycle)",
+                "spec": "Toja / Recycle",
+                "image": "https://placehold.co/160x160/E5E7EB/6B7280?text=Item+Image"
+            },
+            {
+                "name": "Garbage Bag Bio Green print 30X50 51 Micron (Toja / Recycle)",
+                "spec": "Toja / Recycle",
+                "image": "https://placehold.co/160x160/E5E7EB/6B7280?text=Item+Image"
+            },
+            {
+                "name": "Oxo Bio Degradable Bags 19*21 (1 Pkt = 30 Pcs) (OXO Certified)",
+                "spec": "OXO Certified",
+                "image": "https://placehold.co/160x160/E5E7EB/6B7280?text=Item+Image"
+            },
+            {
+                "name": "Oxo Bio Degradable Bags 30*50 (1 Pkt = 10 Pcs) (OXO Certified)",
+                "spec": "OXO Certified",
+                "image": "https://placehold.co/160x160/E5E7EB/6B7280?text=Item+Image"
+            },
+            {
+                "name": "Double Bucket on wheels 2X15 LT. Trolley (Red/Green/Yellow/Blue) (Quality Hygiene)",
+                "spec": "Quality Hygiene",
+                "image": "https://placehold.co/160x160/E5E7EB/6B7280?text=Item+Image"
+            },
+            {
+                "name": "Cleaning Mop Bucket With Heavy Duty Plastic (Quality Hygiene)",
+                "spec": "Quality Hygiene",
+                "image": "https://placehold.co/160x160/E5E7EB/6B7280?text=Item+Image"
+            },
+            {
+                "name": "Magic Mop Spin Trolly (Any as per available) (Local)",
+                "spec": "Local",
+                "image": "https://placehold.co/160x160/E5E7EB/6B7280?text=Item+Image"
+            },
+            {
+                "name": "Garbage Container KC Grey 50 Ltrs Bin (Keep Clean)",
+                "spec": "Keep Clean",
+                "image": "https://placehold.co/160x160/E5E7EB/6B7280?text=Item+Image"
+            },
+            {
+                "name": "Keep Clean Blue 25 Ltrs Bin with Lid (Keep Clean)",
+                "spec": "Keep Clean",
+                "image": "https://placehold.co/160x160/E5E7EB/6B7280?text=Item+Image"
+            },
+            {
+                "name": "SS Ash Bin 12\" x 28\"",
+                "spec": "",
+                "image": "https://placehold.co/160x160/E5E7EB/6B7280?text=Item+Image"
+            },
+            {
+                "name": "MS Nated Dustbin 9\" x 10\"",
+                "spec": "",
+                "image": "https://placehold.co/160x160/E5E7EB/6B7280?text=Item+Image"
+            },
+            {
+                "name": "Milan W/B 240 Ltr Blue + Lid (Milan)",
+                "spec": "Milan",
+                "image": "https://placehold.co/160x160/E5E7EB/6B7280?text=Item+Image"
+            },
+            {
+                "name": "Steel Swing Lid Dustbin 14x28",
+                "spec": "",
+                "image": "https://placehold.co/160x160/E5E7EB/6B7280?text=Item+Image"
+            }
+        ]
+    },
+    {
+        "name": "Cleaning Chemicals & Disposables",
+        "id": "cleaning-chemicals-disposables",
+        "products": [
+            {
+                "name": "Scotch Brite - 10Cm X 15Cm (Gold Coin Gala/Gebi3M/)",
+                "spec": "Gold Coin Gala/Gebi3M/",
+                "image": "https://placehold.co/160x160/E5E7EB/6B7280?text=Item+Image"
+            },
+            {
+                "name": "Nylon Scrubber",
+                "spec": "",
+                "image": "https://placehold.co/160x160/E5E7EB/6B7280?text=Item+Image"
+            },
+            {
+                "name": "Pink Sani Cube",
+                "spec": "",
+                "image": "https://placehold.co/160x160/E5E7EB/6B7280?text=Item+Image"
+            },
+            {
+                "name": "Sainted Cubes (Senton/Khushbu/ Wonder Fresh)",
+                "spec": "Senton/Khushbu/ Wonder Fresh",
+                "image": "https://placehold.co/160x160/E5E7EB/6B7280?text=Item+Image"
+            },
+            {
+                "name": "Naphthalin Ball White (Super)",
+                "spec": "Super",
+                "image": "https://placehold.co/160x160/E5E7EB/6B7280?text=Item+Image"
+            },
+            {
+                "name": "Soap 75gm (Lux/Dettol)",
+                "spec": "Lux/Dettol",
+                "image": "https://placehold.co/160x160/E5E7EB/6B7280?text=Item+Image"
+            },
+            {
+                "name": "Colour Phenyle Ozone 1 Ltr (Ozone)",
+                "spec": "Ozone",
+                "image": "https://placehold.co/160x160/E5E7EB/6B7280?text=Item+Image"
+            },
+            {
+                "name": "Green Phenyle - Concentrated 1 Ltr (Generic)",
+                "spec": "Generic",
+                "image": "https://placehold.co/160x160/E5E7EB/6B7280?text=Item+Image"
+            },
+            {
+                "name": "Green Phenyl - Concentrated 5 Ltrs Pack (Home Fresh)",
+                "spec": "Home Fresh",
+                "image": "https://placehold.co/160x160/E5E7EB/6B7280?text=Item+Image"
+            },
+            {
+                "name": "R1 Taski (Batharoom Cleaner) 5 Ltr Can (Taski)",
+                "spec": "Taski",
+                "image": "https://placehold.co/160x160/E5E7EB/6B7280?text=Item+Image"
+            },
+            {
+                "name": "Neronex Tc Mild (Nerokem Batharoom Cleaner) 5 Ltr Can (Nerokem)",
+                "spec": "Nerokem",
+                "image": "https://placehold.co/160x160/E5E7EB/6B7280?text=Item+Image"
+            },
+            {
+                "name": "R2 Taski (Hard Surface Cleaner) 5 Ltr Can (Taski)",
+                "spec": "Taski",
+                "image": "https://placehold.co/160x160/E5E7EB/6B7280?text=Item+Image"
+            },
+            {
+                "name": "Insteen Nfc Nerokem Hard Surface Cleaner/ Floor Cleaner 5 Ltr Can (Nerokem)",
+                "spec": "Nerokem",
+                "image": "https://placehold.co/160x160/E5E7EB/6B7280?text=Item+Image"
+            },
+            {
+                "name": "Pot/Dish Wash-Nerofoam Multi (All Purpose Cleaner) 5 Ltr Can (Nerokem)",
+                "spec": "Nerokem",
+                "image": "https://placehold.co/160x160/E5E7EB/6B7280?text=Item+Image"
+            },
+            {
+                "name": "Room Freshner Citrus/Lemon Nerokem (Nerokem)",
+                "spec": "Nerokem",
+                "image": "https://placehold.co/160x160/E5E7EB/6B7280?text=Item+Image"
+            },
+            {
+                "name": "R4 Furniture Polish Taski 5 Ltr Can (Diversey)",
+                "spec": "Diversey",
+                "image": "https://placehold.co/160x160/E5E7EB/6B7280?text=Item+Image"
+            },
+            {
+                "name": "R5 Room Freshner Taski 5 Ltr Can (Diversey)",
+                "spec": "Diversey",
+                "image": "https://placehold.co/160x160/E5E7EB/6B7280?text=Item+Image"
+            },
+            {
+                "name": "Room Freshner Schevaran 5 Ltr Can (Schevaran)",
+                "spec": "Schevaran",
+                "image": "https://placehold.co/160x160/E5E7EB/6B7280?text=Item+Image"
+            },
+            {
+                "name": "R6 Taski (Toilet Cleaner) 5 Ltr Can (Diversey)",
+                "spec": "Diversey",
+                "image": "https://placehold.co/160x160/E5E7EB/6B7280?text=Item+Image"
+            },
+            {
+                "name": "R3 Glass Cleaner Taski 5 Ltr Can (Diversey)",
+                "spec": "Diversey",
+                "image": "https://placehold.co/160x160/E5E7EB/6B7280?text=Item+Image"
+            },
+            {
+                "name": "Glass Cleaner Nerokem With Msds Certificate (Nerokem)",
+                "spec": "Nerokem",
+                "image": "https://placehold.co/160x160/E5E7EB/6B7280?text=Item+Image"
+            },
+            {
+                "name": "SUMA INOX D 7.1-5 Ltrs Can (Diversey)",
+                "spec": "Diversey",
+                "image": "https://placehold.co/160x160/E5E7EB/6B7280?text=Item+Image"
+            },
+            {
+                "name": "Suma Drain - 5 Ltrs Can (Diversey)",
+                "spec": "Diversey",
+                "image": "https://placehold.co/160x160/E5E7EB/6B7280?text=Item+Image"
+            },
+            {
+                "name": "Colin Glass Cleaner/ All Purpose Taski 500 MI (Taski Crew)",
+                "spec": "Taski Crew",
+                "image": "https://placehold.co/160x160/E5E7EB/6B7280?text=Item+Image"
+            },
+            {
+                "name": "Colin Glass And Surface Cleaner 500 MI (Reckitt Benckiser)",
+                "spec": "Reckitt Benckiser",
+                "image": "https://placehold.co/160x160/E5E7EB/6B7280?text=Item+Image"
+            },
+            {
+                "name": "R6 Taski (Toilet Cleaner - 500 MI Bottle) (Diversey)",
+                "spec": "Diversey",
+                "image": "https://placehold.co/160x160/E5E7EB/6B7280?text=Item+Image"
+            },
+            {
+                "name": "Taski R7 Floor Cleaner Concentrate 5 Ltrs Can (Diversey)",
+                "spec": "Diversey",
+                "image": "https://placehold.co/160x160/E5E7EB/6B7280?text=Item+Image"
+            },
+            {
+                "name": "Taski R9 Bathroom Cleaner Concentrate 5 Ltrs Can (Diversey)",
+                "spec": "Diversey",
+                "image": "https://placehold.co/160x160/E5E7EB/6B7280?text=Item+Image"
+            },
+            {
+                "name": "Taski Spiral F11Y Concentrated Floor Cleaner 5 Ltrs Can (Diversey)",
+                "spec": "Diversey",
+                "image": "https://placehold.co/160x160/E5E7EB/6B7280?text=Item+Image"
+            },
+            {
+                "name": "Taski Spiral Hd Floor Cleaner/Degreaser 5 Ltrs Can (Diversey)",
+                "spec": "Diversey",
+                "image": "https://placehold.co/160x160/E5E7EB/6B7280?text=Item+Image"
+            },
+            {
+                "name": "Taski Tr 101 Carpet & Upholstery Cleaner 5 Ltrs Can (Diversey)",
+                "spec": "Diversey",
+                "image": "https://placehold.co/160x160/E5E7EB/6B7280?text=Item+Image"
+            },
+            {
+                "name": "Taski Tr 103 Carpet Detergent 5 Ltrs Can (Diversey)",
+                "spec": "Diversey",
+                "image": "https://placehold.co/160x160/E5E7EB/6B7280?text=Item+Image"
+            },
+            {
+                "name": "Taski Emeral Plus 200 Ml Bottle (Diversey)",
+                "spec": "Diversey",
+                "image": "https://placehold.co/160x160/E5E7EB/6B7280?text=Item+Image"
+            },
+            {
+                "name": "Taski TERRANOVA 5 Ltr Can (Diversey)",
+                "spec": "Diversey",
+                "image": "https://placehold.co/160x160/E5E7EB/6B7280?text=Item+Image"
+            },
+            {
+                "name": "TASKI NOBILE PLUS - 1 Kgs Pack (Diversey)",
+                "spec": "Diversey",
+                "image": "https://placehold.co/160x160/E5E7EB/6B7280?text=Item+Image"
+            },
+            {
+                "name": "Toilet Cleaner 500 MI Bottle (Taski Crew)",
+                "spec": "Taski Crew",
+                "image": "https://placehold.co/160x160/E5E7EB/6B7280?text=Item+Image"
+            },
+            {
+                "name": "VIM LIQUID DISH WASH - 5 Ltrs Pack (Hindustan Unilever)",
+                "spec": "Hindustan Unilever",
+                "image": "https://placehold.co/160x160/E5E7EB/6B7280?text=Item+Image"
+            },
+            {
+                "name": "Prill Dish Wash 425ml (Dish Wash)",
+                "spec": "Dish Wash",
+                "image": "https://placehold.co/160x160/E5E7EB/6B7280?text=Item+Image"
+            },
+            {
+                "name": "Wonder Fresh Dish Wash 500 ml (Wonder Fresh)",
+                "spec": "Wonder Fresh",
+                "image": "https://placehold.co/160x160/E5E7EB/6B7280?text=Item+Image"
+            },
+            {
+                "name": "Nbc- Nerokem Toilet Cleaner 500 MI (Nerokem)",
+                "spec": "Nerokem",
+                "image": "https://placehold.co/160x160/E5E7EB/6B7280?text=Item+Image"
+            },
+            {
+                "name": "Nbc- Nerokem Toilet Cleaner (Nerokem)",
+                "spec": "Nerokem",
+                "image": "https://placehold.co/160x160/E5E7EB/6B7280?text=Item+Image"
+            },
+            {
+                "name": "Lizol Disinfectant Surface Cleaner 500MI Bottle (Lizol)",
+                "spec": "Lizol",
+                "image": "https://placehold.co/160x160/E5E7EB/6B7280?text=Item+Image"
+            },
+            {
+                "name": "Acid 5 Ltrs Can (Local)",
+                "spec": "Local",
+                "image": "https://placehold.co/160x160/E5E7EB/6B7280?text=Item+Image"
+            },
+            {
+                "name": "Sodium Hypo Chloride 5% (Local)",
+                "spec": "Local",
+                "image": "https://placehold.co/160x160/E5E7EB/6B7280?text=Item+Image"
+            },
+            {
+                "name": "Urinal -V Screen (Vectair)",
+                "spec": "Vectair",
+                "image": "https://placehold.co/160x160/E5E7EB/6B7280?text=Item+Image"
+            },
+            {
+                "name": "Urinal Screen (Wonder Fresh)",
+                "spec": "Wonder Fresh",
+                "image": "https://placehold.co/160x160/E5E7EB/6B7280?text=Item+Image"
+            },
+            {
+                "name": "Nirma Washing Powder 1 Kgs Pack (Nirma)",
+                "spec": "Nirma",
+                "image": "https://placehold.co/160x160/E5E7EB/6B7280?text=Item+Image"
+            },
+            {
+                "name": "Hit Black Spray 200 Ml (Godrej)",
+                "spec": "Godrej",
+                "image": "https://placehold.co/160x160/E5E7EB/6B7280?text=Item+Image"
+            },
+            {
+                "name": "Hit Red Spray 200 Ml (Godrej)",
+                "spec": "Godrej",
+                "image": "https://placehold.co/160x160/E5E7EB/6B7280?text=Item+Image"
+            },
+            {
+                "name": "BREX- Chemical cleaner and Descaler and Rust remover - 5 Ltrs Packing Quickly dissolves accumulated rust, lime, fungus, uric acid salts and excess cement in one easy application. Use BREX to remove- RUST,Mineral Sediments,Mortar, Cooling Towers, Heat Exchangers, Condenser systems, Boiler units, Pipes and Tubes, Construction equipments, Toilet and Urinal Bowls, Rust and iron oxides, Stains, Thin layers of Concrete cement, Scale and other (NCH)",
+                "spec": "NCH",
+                "image": "https://placehold.co/160x160/E5E7EB/6B7280?text=Item+Image"
+            },
+            {
+                "name": "Deoscent 4 Ltrs Pack - Advanced Formula for Extreme odors. Top rated scent for Controlling unwanted & Foul Odors.Pleasant Cherry Scent Technology (NCH)",
+                "spec": "NCH",
+                "image": "https://placehold.co/160x160/E5E7EB/6B7280?text=Item+Image"
+            },
+            {
+                "name": "Everbrite Plus BL (1 CAN = 5 LTRS) Cleaner- Disinfectant- Sanitizer- Deodorizer- fungicide- virucide. Best for cleaning, disinfecting and sanitizing any surface where plain water can be used. Very helpful in preventing the spread of COVID 19. Dilution 1:20 (NCH)",
+                "spec": "NCH",
+                "image": "https://placehold.co/160x160/E5E7EB/6B7280?text=Item+Image"
+            },
+            {
+                "name": "Urinal Screen with enzeme block (With enzeme block)",
+                "spec": "With enzeme block",
+                "image": "https://placehold.co/160x160/E5E7EB/6B7280?text=Item+Image"
+            },
+            {
+                "name": "Drainex Powder 50gm (Kiwi / Good Home)",
+                "spec": "Kiwi / Good Home",
+                "image": "https://placehold.co/160x160/E5E7EB/6B7280?text=Item+Image"
+            },
+            {
+                "name": "Frinz Auto - Automatic Dish Wash - 30 ltr Pack (Nerokem)",
+                "spec": "Nerokem",
+                "image": "https://placehold.co/160x160/E5E7EB/6B7280?text=Item+Image"
+            },
+            {
+                "name": "Frinz Rinse - Additive for Automatic Dishwasher - 30 ltr Pack (Nerokem)",
+                "spec": "Nerokem",
+                "image": "https://placehold.co/160x160/E5E7EB/6B7280?text=Item+Image"
+            },
+            {
+                "name": "Car Washing liquid / 3M Car Care Wash Shampoo 1 Ltr (3M)",
+                "spec": "3M",
+                "image": "https://placehold.co/160x160/E5E7EB/6B7280?text=Item+Image"
+            }
+        ]
+    },
+    {
+        "name": "Industrial & Heavy Duty Cleaning",
+        "id": "industrial-heavy-duty",
+        "products": [
+            {
+                "name": "Telescopic Rods 6 Meter - Roots (Roots)",
+                "spec": "Roots",
+                "image": "https://placehold.co/160x160/E5E7EB/6B7280?text=Item+Image"
+            },
+            {
+                "name": "Telescopic Rods Local (9 Mtr.)",
+                "spec": "9 Mtr.",
+                "image": "https://placehold.co/160x160/E5E7EB/6B7280?text=Item+Image"
+            },
+            {
+                "name": "Telescopic Rods Local (4 Mtr.)",
+                "spec": "4 Mtr.",
+                "image": "https://placehold.co/160x160/E5E7EB/6B7280?text=Item+Image"
+            },
+            {
+                "name": "Telescopic Rods Local (6 Mtr)",
+                "spec": "6 Mtr",
+                "image": "https://placehold.co/160x160/E5E7EB/6B7280?text=Item+Image"
+            },
+            {
+                "name": "Joint For Telescopic Poles",
+                "spec": "",
+                "image": "https://placehold.co/160x160/E5E7EB/6B7280?text=Item+Image"
+            },
+            {
+                "name": "Cone For Telescopic Poles",
+                "spec": "",
+                "image": "https://placehold.co/160x160/E5E7EB/6B7280?text=Item+Image"
+            },
+            {
+                "name": "Air Revialator Machine Reduce Indoor Air Polution, Deodorizing & Humidifying, Aroma Therapeutic, Safe & Simple To Use. (Imported)",
+                "spec": "Imported",
+                "image": "https://placehold.co/160x160/E5E7EB/6B7280?text=Item+Image"
+            },
+            {
+                "name": "Air Room Freshner Machine Liquide- 1 Ltr (Imported)",
+                "spec": "Imported",
+                "image": "https://placehold.co/160x160/E5E7EB/6B7280?text=Item+Image"
+            },
+            {
+                "name": "Hang Up 70 Cm, Tool Holder (Unger Brand H0700)",
+                "spec": "Unger Brand H0700",
+                "image": "https://placehold.co/160x160/E5E7EB/6B7280?text=Item+Image"
+            },
+            {
+                "name": "Water Wand Standard 55 Cm (Unger Brand Mw550)",
+                "spec": "Unger Brand Mw550",
+                "image": "https://placehold.co/160x160/E5E7EB/6B7280?text=Item+Image"
+            },
+            {
+                "name": "105Cm Replacement Rubber (Unger Brand ( Rr99H))",
+                "spec": "Unger Brand ( Rr99H)",
+                "image": "https://placehold.co/160x160/E5E7EB/6B7280?text=Item+Image"
+            },
+            {
+                "name": "105Cm Replacement Rubber (Generic / NGM)",
+                "spec": "Generic / NGM",
+                "image": "https://placehold.co/160x160/E5E7EB/6B7280?text=Item+Image"
+            },
+            {
+                "name": "Uni Tech 2 Sections 6,5'/3.00M (Unger Brand(Os260))",
+                "spec": "Unger Brand(Os260)",
+                "image": "https://placehold.co/160x160/E5E7EB/6B7280?text=Item+Image"
+            },
+            {
+                "name": "Unitec T-Bar 35 Cm (Green) (Oe350)",
+                "spec": "Oe350",
+                "image": "https://placehold.co/160x160/E5E7EB/6B7280?text=Item+Image"
+            },
+            {
+                "name": "Original Washer Sleeve 35 Cm (Ws350)",
+                "spec": "Ws350",
+                "image": "https://placehold.co/160x160/E5E7EB/6B7280?text=Item+Image"
+            },
+            {
+                "name": "Lobby Dust Pan With Broom (Imported)",
+                "spec": "Imported",
+                "image": "https://placehold.co/160x160/E5E7EB/6B7280?text=Item+Image"
+            },
+            {
+                "name": "Single Disk Machine (Charnock)",
+                "spec": "Charnock",
+                "image": "https://placehold.co/160x160/E5E7EB/6B7280?text=Item+Image"
+            },
+            {
+                "name": "Vacuum Machine (30 Ltr Capacity)",
+                "spec": "",
+                "image": "https://placehold.co/160x160/E5E7EB/6B7280?text=Item+Image"
+            },
+            {
+                "name": "Black Stripper Pad 17 Inch 3M (3M / Northern)",
+                "spec": "3M / Northern",
+                "image": "https://placehold.co/160x160/E5E7EB/6B7280?text=Item+Image"
+            },
+            {
+                "name": "Red Buffer Pad 17 Inch 3M (3M / Northern)",
+                "spec": "3M / Northern",
+                "image": "https://placehold.co/160x160/E5E7EB/6B7280?text=Item+Image"
+            },
+            {
+                "name": "Green Scrubbing Pad 17 Inch 3M (3M / Northern)",
+                "spec": "3M / Northern",
+                "image": "https://placehold.co/160x160/E5E7EB/6B7280?text=Item+Image"
+            },
+            {
+                "name": "White Super Polish Pad 17 Inch 3M (3M / Northern)",
+                "spec": "3M / Northern",
+                "image": "https://placehold.co/160x160/E5E7EB/6B7280?text=Item+Image"
+            },
+            {
+                "name": "Multipurpose Cleaning Trolley Only Bucket Colour Option Available (STARACE 111 Trolley) (Quality Hygiene)",
+                "spec": "Quality Hygiene",
+                "image": "https://placehold.co/160x160/E5E7EB/6B7280?text=Item+Image"
+            },
+            {
+                "name": "STAR DUSTER PRO CEILING FAN Use by hand or attach to any telescopic pole for high-access cleaning.Plush microfiber strands aggressively trap and hold dirt.Microfiber sleeve is removable and machine washable. (Unger)",
+                "spec": "Unger",
+                "image": "https://placehold.co/160x160/E5E7EB/6B7280?text=Item+Image"
+            },
+            {
+                "name": "Micro Fiber Duster For Cleaning Fan (Any as per available) (Quality Hygiene)",
+                "spec": "Quality Hygiene",
+                "image": "https://placehold.co/160x160/E5E7EB/6B7280?text=Item+Image"
+            },
+            {
+                "name": "UNI TECH 2 SECTION EXTENSION POLE, Constructed of extruded aluminum, strong yet light weight, Optiloc system locks and loosens in a 1/2 turn . All tools can be fitted to the pole . Available in sizes. (Green/Blue) (Quality Hygiene)",
+                "spec": "Quality Hygiene",
+                "image": "https://placehold.co/160x160/E5E7EB/6B7280?text=Item+Image"
+            },
+            {
+                "name": "Glass Cleaning Kit (Generic Good Quality)",
+                "spec": "Generic Good Quality",
+                "image": "https://placehold.co/160x160/E5E7EB/6B7280?text=Item+Image"
+            },
+            {
+                "name": "Mop Tools Holder 5 Section Only ( Alluminium Frame Holder) (Blue ) (Quality Hygiene)",
+                "spec": "Quality Hygiene",
+                "image": "https://placehold.co/160x160/E5E7EB/6B7280?text=Item+Image"
+            },
+            {
+                "name": "ERGO TEC FLOOR SCRAPER, Product Code : SH000 - UNGER (Unger)",
+                "spec": "Unger",
+                "image": "https://placehold.co/160x160/E5E7EB/6B7280?text=Item+Image"
+            }
+        ]
+    },
+    {
+        "name": "Other Hospitality Supplies",
+        "id": "other-hospitality",
+        "products": [
+            {
+                "name": "Dust Pan With Brush (Generic)",
+                "spec": "Generic",
+                "image": "https://placehold.co/160x160/E5E7EB/6B7280?text=Item+Image"
+            },
+            {
+                "name": "Dust Pan Regular (Milan/Pawan/ Ratan)",
+                "spec": "Milan/Pawan/ Ratan",
+                "image": "https://placehold.co/160x160/E5E7EB/6B7280?text=Item+Image"
+            },
+            {
+                "name": "Dust Pan Plastic (Gala)",
+                "spec": "Gala",
+                "image": "https://placehold.co/160x160/E5E7EB/6B7280?text=Item+Image"
+            },
+            {
+                "name": "Hand Gloves (Green/Blue/Orange) (Victor/Senstouch)",
+                "spec": "Victor/Senstouch",
+                "image": "https://placehold.co/160x160/E5E7EB/6B7280?text=Item+Image"
+            },
+            {
+                "name": "Hand Gloves Cotton (Hossiery Cloth)",
+                "spec": "Hossiery Cloth",
+                "image": "https://placehold.co/160x160/E5E7EB/6B7280?text=Item+Image"
+            },
+            {
+                "name": "Shoe Polish Brush. (Tigar Brand)",
+                "spec": "Tigar Brand",
+                "image": "https://placehold.co/160x160/E5E7EB/6B7280?text=Item+Image"
+            },
+            {
+                "name": "Shoe Polish Brown & Black 15gm (Kiwi / Cherry)",
+                "spec": "Kiwi / Cherry",
+                "image": "https://placehold.co/160x160/E5E7EB/6B7280?text=Item+Image"
+            },
+            {
+                "name": "Spray Bottle 750 MI (750 MI)",
+                "spec": "750 MI",
+                "image": "https://placehold.co/160x160/E5E7EB/6B7280?text=Item+Image"
+            },
+            {
+                "name": "Spray Bottle 2 Ltrs Capacity",
+                "spec": "",
+                "image": "https://placehold.co/160x160/E5E7EB/6B7280?text=Item+Image"
+            },
+            {
+                "name": "Spray Gun",
+                "spec": "",
+                "image": "https://placehold.co/160x160/E5E7EB/6B7280?text=Item+Image"
+            },
+            {
+                "name": "Caution Board- Wet Floor (Imported)",
+                "spec": "Imported",
+                "image": "https://placehold.co/160x160/E5E7EB/6B7280?text=Item+Image"
+            },
+            {
+                "name": "Caution Board- Cleaning In Progress (Imported)",
+                "spec": "Imported",
+                "image": "https://placehold.co/160x160/E5E7EB/6B7280?text=Item+Image"
+            },
+            {
+                "name": "Office Area Cady Gray (Imported)",
+                "spec": "Imported",
+                "image": "https://placehold.co/160x160/E5E7EB/6B7280?text=Item+Image"
+            },
+            {
+                "name": "KITCHEN WIPER (GenralGood Quality)",
+                "spec": "GenralGood Quality",
+                "image": "https://placehold.co/160x160/E5E7EB/6B7280?text=Item+Image"
+            },
+            {
+                "name": "DURACELL BATTERY \"C\" type (Duracell)",
+                "spec": "Duracell",
+                "image": "https://placehold.co/160x160/E5E7EB/6B7280?text=Item+Image"
+            },
+            {
+                "name": "3M GP Bond Tape 1.2cm x 5 Mtr (3M)",
+                "spec": "3M",
+                "image": "https://placehold.co/160x160/E5E7EB/6B7280?text=Item+Image"
+            },
+            {
+                "name": "3M GP Bond Tape 2.4cm x 5 Mtr (3M)",
+                "spec": "3M",
+                "image": "https://placehold.co/160x160/E5E7EB/6B7280?text=Item+Image"
+            },
+            {
+                "name": "Bio block Refill 90 gm",
+                "spec": "",
+                "image": "https://placehold.co/160x160/E5E7EB/6B7280?text=Item+Image"
+            },
+            {
+                "name": "Tissue Roll Holder Stainless Steel Jaguar (Jaguar)",
+                "spec": "Jaguar",
+                "image": "https://placehold.co/160x160/E5E7EB/6B7280?text=Item+Image"
+            }
+        ]
+    }
+];
+
+        // Function to render all items into the products container
+        document.addEventListener('DOMContentLoaded', () => {
+            const productsContainer = document.getElementById('products-container');
+            const categoryNav = document.getElementById('category-nav-links');
+            productsContainer.innerHTML = ''; // Clear existing content
+
+            categories.forEach(category => {
+                // Create navigation link
+                const navLink = `<a href="#${category.id}" class="category-nav-link">${category.name}</a>`;
+                categoryNav.innerHTML += navLink;
+
+                // Create category section
+                const categorySection = document.createElement('section');
+                categorySection.id = category.id;
+                categorySection.className = 'py-8 px-4 sm:px-6 lg:px-8 bg-white rounded-lg shadow-sm mb-10'; // Added padding and shadow
+                categorySection.innerHTML = `
+                    <h2 class="text-3xl font-bold text-black mb-6 border-l-4 border-gold pl-4">${category.name}</h2>
+                    <div class="products-grid"></div>
+                `;
+                productsContainer.appendChild(categorySection);
+
+                const currentCategoryGrid = categorySection.querySelector('.products-grid');
+
+                category.products.forEach(item => {
+                    // Remove the 'price' property from the item object before use
+                    delete item.price;
+                    
+                    // Sanitize item.spec and item.name for use in JavaScript string for onclick
+                    const sanitizedName = item.name.replace(/'/g, "\\'");
+                    const sanitizedSpec = item.spec.replace(/'/g, "\\'");
+
+                    const itemCard = `
+                        <div class="item-card bg-white rounded-xl overflow-hidden shadow-lg p-4 flex flex-col items-center text-center">
+                            <img src="${item.image}" alt="${item.name}" class="item-image-placeholder rounded-lg mb-4">
+                            <h3 class="text-sm font-semibold mb-2 text-black">${item.name}</h3>
+                            <button onclick="addToInquiryList('${sanitizedName}', '${sanitizedSpec}')"
+                                    class="add-to-inquiry-button bg-gold text-white font-bold py-2 px-6 rounded-full shadow-md hover:bg-opacity-90 transform hover:scale-105 transition-all duration-300 ease-in-out text-sm w-full">
+                                Add to Inquiry
+                            </button>
+                        </div>
+                    `;
+                    currentCategoryGrid.innerHTML += itemCard;
+                });
+            });
+            updateInquiryCounter(); // Initialize counter on load
+        });
+    </script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aone Hospitality Services</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+     <style>
+   .whatsapp_float{
+            position:fixed;
+            bottom:40px;
+            right:20px;
+        }
+        .call_float{
+            position:fixed;
+            bottom:40px;          
+            left:20px;
+        </style>
+    <div class="whatsapp_float">
+        <a href="https://wa.me/919867531298" target="_blank"><img src='wp.png' width="60px"
+                                                                 class="whatsapp_float_btn"/></a>
+    </div>
+     <div class="call_float">
+        <a href="tel:+917387869062" target="_blank"><img src='call.png' width="60px"
+                                                                 class="call_float_btn"/></a>
+    </div>   
+    <style>
+        /* Custom font import for Inter */
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+        body {
+            font-family: 'Inter', sans-serif;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+        /* Custom scroll-behavior for smooth scrolling on internal links */
+        html {
+            scroll-behavior: smooth;
+        }
+        /* Style for the back-to-top button - initially hidden */
+        #back-to-top {
+            display: none;
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            z-index: 99;
+            border: none;
+            outline: none;
+            background-color: #0d9488; /* Teal-600 */
+            color: white;
+            cursor: pointer;
+            padding: 0.75rem 1rem;
+            border-radius: 0.5rem; /* Rounded corners */
+            font-size: 1.5rem;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            transition: background-color 0.3s ease-in-out, transform 0.2s ease-in-out;
+        }
+        #back-to-top:hover {
+            background-color: #0f766e; /* Darker Teal */
+            transform: translateY(-2px);
+        }
+    </style>
+</head>
+<body class="bg-gray-50 text-gray-800">
+
+    <!-- Header Section -->
+    <header class="bg-white shadow-sm py-4 fixed top-0 w-full z-50">
+        <nav class="container mx-auto px-4 flex justify-between items-center">
+            <!-- Logo -->
+            <a href="#hero" class="text-2xl font-bold text-teal-600 flex items-center rounded-md p-2">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 mr-2 text-blue-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M12 2L2 7l10 5 10-5-10-5z"></path>
+                    <path d="M2 17l10 5 10-5"></path>
+                    <path d="M2 12l10 5 10-5"></path>
+                </svg>
+                Aone Hospitality Services
+            </a>
+            <!-- Navigation Links -->
+            <div class="hidden md:flex space-x-8">
+                <a href="index.html" class="text-gray-600 hover:text-teal-600 font-medium transition duration-300 rounded-md p-2">Home</a>
+                <a href="product.html" class="text-gray-600 hover:text-teal-600 font-medium transition duration-300 rounded-md p-2">Products</a>
+                <a href="about.html" class="text-gray-600 hover:text-teal-600 font-medium transition duration-300 rounded-md p-2">About</a>
+                <a href="about.html" class="text-gray-600 hover:text-teal-600 font-medium transition duration-300 rounded-md p-2">Testimonials</a>
+                <a href="#contact" class="px-5 py-2 bg-teal-600 text-white rounded-lg hover:bg-teal-700 transition duration-300 shadow-md">Contact Us</a>
+            </div>
+            <!-- Mobile Menu Button (Hamburger) -->
+            <button id="mobile-menu-button" class="md:hidden text-gray-600 hover:text-teal-600 p-2 rounded-md focus:outline-none focus:ring-2 focus:ring-teal-500 transition duration-300">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16m-7 6h7" />
+                </svg>
+            </button>
+        </nav>
+        <!-- Mobile Menu (initially hidden) -->
+        <div id="mobile-menu" class="hidden md:hidden bg-white shadow-lg py-4 border-t border-gray-200">
+            <a href="index.html" class="text-gray-600 hover:text-teal-600 font-medium transition duration-300 rounded-md p-2">Home</a>
+            <a href="product.html" class="block px-4 py-2 text-gray-700 hover:bg-gray-100 rounded-md transition duration-300">Products</a>
+            <a href="about.html" class="block px-4 py-2 text-gray-700 hover:bg-gray-100 rounded-md transition duration-300">About</a>
+            <a href="about.html" class="block px-4 py-2 text-gray-700 hover:bg-gray-100 rounded-md transition duration-300">Testimonials</a>
+            <a href="#contact" class="block px-4 py-2 text-teal-600 hover:bg-teal-50 rounded-md transition duration-300 font-medium">Contact Us</a>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section id="hero" class="relative bg-gradient-to-r from-blue-600 to-teal-600 text-white py-24 md:py-36 mt-16 overflow-hidden">
+        <div class="absolute inset-0 bg-pattern opacity-10"></div> <!-- Background pattern overlay -->
+        <div class="container mx-auto px-4 text-center relative z-10">
+            <h1 class="text-4xl md:text-6xl font-extrabold leading-tight mb-6 animate-fade-in-up">
+                Experience Top Quility  <span class="text-yellow-300">Hospitality And Cleaning Producs</span>
+            </h1>
+            <p class="text-lg md:text-xl max-w-2xl mx-auto mb-10 opacity-90 animate-fade-in-up delay-200">
+               Premium brand product from direct manufacturing plant at discounted price from market. 
+            </p>
+            <a href="product.html" class="inline-block bg-white text-teal-700 font-bold py-3 px-8 rounded-full shadow-lg hover:bg-gray-100 hover:scale-105 transition duration-300 transform animate-fade-in-up delay-400">
+                Explore Our Products
+            </a>
+            <a href="about.html" class="inline-block bg-white text-teal-700 font-bold py-3 px-8 rounded-full shadow-lg hover:bg-gray-100 hover:scale-105 transition duration-300 transform animate-fade-in-up delay-400">
+                About
+            </a>
+             <a href="#contact" class="inline-block bg-white text-teal-700 font-bold py-3 px-8 rounded-full shadow-lg hover:bg-gray-100 hover:scale-105 transition duration-300 transform animate-fade-in-up delay-400">
+                Contact
+            </a>
+        </div>
+    </section>
+    <!-- Navigation for Categories - Sticky -->
+    <nav class="category-nav sticky top-0 md:top-20 lg:top-16 bg-white shadow-sm py-3 z-10 border-b border-gray-100 overflow-x-auto category-nav-scroll">
+        <div class="container mx-auto px-6 flex justify-center space-x-4 whitespace-nowrap" id="category-nav-links">
+            <!-- Category links will be inserted here by JavaScript -->
+        </div>
+    </nav>
+
+    <!-- Spacer for fixed header and sticky nav -->
+    <div class="header-spacer"></div>
+    <!-- Operating Hours Section -->
+    <section class="bg-gray-50 py-8 px-6 md:px-12 text-center border-b border-gray-100">
+        <h3 class="text-2xl font-bold text-black mb-4">Operating Hours</h3>
+        <p class="text-lg text-gray-700">
+            Monday to Saturday: <span class="font-semibold text-gold">9:30 AM - 7:30 PM</span>
+        </p>
+    </section>
+
+    <!-- Product Display Area (Now for Categories) -->
+    <main class="container mx-auto px-6 py-12">
+        <h2 class="text-4xl font-extrabold text-center text-black mb-10">Our Products by Category</h2>
+        <div id="products-container" class="space-y-12">
+            <!-- Category sections and product items will be dynamically loaded here by JavaScript -->
+        </div>
+    </main>
+
+    <!-- Floating Inquiry Button -->
+    <button id="floating-inquiry-button" onclick="openInquiryModal()"
+            class="floating-inquiry-button hidden">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-6 h-6">
+            <path d="M4.5 4.5a3 3 0 0 0-3 3v9a3 3 0 0 0 3 3h8.25a3 3 0 0 0 3-3V7.5a3 3 0 0 0-3-3H4.5ZM19.94 18.094A2.25 2.25 0 0 0 22.5 15.75V7.5a3 3 0 0 0-3-3h-2.25a.75.75 0 0 0 0 1.5H19.5a1.5 1.5 0 0 1 1.5 1.5v8.25a.75.75 0 0 0 1.5 0Z" />
+        </svg>
+        <span>View Inquiry</span>
+        <span id="inquiry-count" class="inquiry-count">0</span>
+    </button>
+
+    <!-- Inquiry Modal -->
+    <div id="inquiry-modal-overlay" class="modal-overlay">
+        <div class="modal-content">
+            <button onclick="closeInquiryModal()" class="modal-close-button">&times;</button>
+            <h2 class="text-2xl font-bold text-black mb-4">Your Inquiry List (<span id="modal-total-items">0 items</span>)</h2>
+            <ul id="modal-inquiry-list" class="inquiry-list-ul mb-6">
+                <!-- Inquiry items will be loaded here -->
+            </ul>
+            <div class="flex flex-col sm:flex-row gap-4">
+                <button onclick="sendInquiryViaWhatsApp()"
+                        class="bg-[#25D366] text-white font-bold py-3 px-6 rounded-full shadow-md hover:bg-[#1DA851] transition-all duration-300 ease-in-out text-base w-full sm:w-auto">
+                    Send Inquiry via WhatsApp
+                </button>
+                <button onclick="clearInquiryList()"
+                        class="bg-gray-200 text-gray-700 font-bold py-3 px-6 rounded-full shadow-md hover:bg-gray-300 transition-all duration-300 ease-in-out text-base w-full sm:w-auto">
+                    Clear List
+                </button>
+            </div>
+        </div>
+    </div>
+
+     <!-- Call to Action / Contact Section -->
+    <section id="contact" class="bg-gradient-to-r from-teal-600 to-blue-600 text-white py-16 md:py-24 text-center">
+        <div class="container mx-auto px-4">
+            <h2 class="text-3xl md:text-4xl font-bold mb-6">Ready to Experience the <span class="text-yellow-300">Aone Hospitality Services</span> Difference?</h2>
+            <p class="text-lg md:text-xl max-w-2xl mx-auto mb-10 opacity-90">
+                Get in touch with us today to learn more about our products or to place an order.
+            </p>
+            <div class="flex flex-col sm:flex-row justify-center gap-4">
+                <a href="mailto:aonehospitalitys@gmail.com" class="inline-flex items-center justify-center bg-white text-teal-700 font-bold py-3 px-8 rounded-full shadow-lg hover:bg-gray-100 hover:scale-105 transition duration-300 transform">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-2" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
+                        <polyline points="22,6 12,13 2,6"></polyline>
+                    </svg>
+                    Email Us
+                </a>
+                <a href="https://wa.me/919867531298" class="inline-flex items-center justify-center border-2 border-white text-white font-bold py-3 px-8 rounded-full shadow-lg hover:bg-white hover:text-teal-700 hover:scale-105 transition duration-300 transform">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-2" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+                    </svg>
+                    WhatsApp Us
+                </a>
+                <a href="tel:+917387869062" class="inline-flex items-center justify-center border-2 border-white text-white font-bold py-3 px-8 rounded-full shadow-lg hover:bg-white hover:text-teal-700 hover:scale-105 transition duration-300 transform">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-2" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-3.95-3.95A19.79 19.79 0 0 1 2.05 4.18 2 2 0 0 1 4.05 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path>
+                    </svg>
+                    Call Us
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer Section -->
+    <footer class="bg-gray-800 text-gray-300 py-10">
+        <div class="container mx-auto px-4 text-center">
+            <div class="flex flex-col md:flex-row justify-between items-center mb-8">
+                <!-- Logo -->
+                <a href="#hero" class="text-xl font-bold text-teal-400 flex items-center mb-4 md:mb-0">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-2 text-blue-300" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M12 2L2 7l10 5 10-5-10-5z"></path>
+                        <path d="M2 17l10 5 10-5"></path>
+                        <path d="M2 12l10 5 10-5"></path>
+                    </svg>
+                   Aone Hospitality Services
+                </a>
+                <!-- Footer Navigation -->
+                <div class="flex flex-wrap justify-center gap-x-8 gap-y-2 mb-4 md:mb-0">
+                    <a href="about.html" class="hover:text-white transition duration-300">About</a>
+                    <a href="product.html" class="hover:text-white transition duration-300">Products</a>
+                    <a href="#contact" class="hover:text-white transition duration-300">Contact</a>
+                </div>
+                <!-- Social Media Icons (placeholders) -->
+                <div class="flex space-x-4">
+                    <a href="#" class="text-gray-400 hover:text-white transition duration-300">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"></path>
+                        </svg>
+                    </a>
+                    <a href="#" class="text-gray-400 hover:text-white transition duration-300">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M23 3a10.9 10.9 0 0 1-3.14 1.53 4.48 4.48 0 0 0-7.86 3v1A10.66 10.66 0 0 1 3 4s-4 9 5 13a11.64 11.64 0 0 1-7 2c17 0 21-12 21-15.5V3z"></path>
+                        </svg>
+                    </a>
+                    <a href="#" class="text-gray-400 hover:text-white transition duration-300">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" viewBox="0 0 24 24" fill="currentColor">
+                            <rect width="20" height="20" x="2" y="2" rx="5" ry="5"></rect>
+                            <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
+                            <line x1="17.5" x2="17.5" y1="6.5" y2="6.5"></line>
+                        </svg>
+                    </a>
+                </div>
+            </div>
+            <p class="text-sm text-gray-500">&copy; 2025 Aone Hospitality Services. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <!-- Back to Top Button -->
+    <button id="back-to-top" title="Go to top">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M5 10l7-7m0 0l7 7m-7-7v18" />
+        </svg>
+    </button>
+
+    <script>
+        // JavaScript for Mobile Menu Toggle
+        document.getElementById('mobile-menu-button').addEventListener('click', function() {
+            const mobileMenu = document.getElementById('mobile-menu');
+            mobileMenu.classList.toggle('hidden');
+        });
+
+        // JavaScript for Back to Top Button visibility
+        const backToTopButton = document.getElementById('back-to-top');
+
+        window.onscroll = function() {
+            if (document.body.scrollTop > 200 || document.documentElement.scrollTop > 200) {
+                backToTopButton.style.display = "block";
+            } else {
+                backToTopButton.style.display = "none";
+            }
+        };
+
+        // Smooth scroll for back to top button
+        backToTopButton.addEventListener('click', function() {
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        });
+
+        // Smooth scroll for navigation links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+
+                const targetId = this.getAttribute('href');
+                const targetElement = document.querySelector(targetId);
+
+                // Close mobile menu if open
+                const mobileMenu = document.getElementById('mobile-menu');
+                if (!mobileMenu.classList.contains('hidden')) {
+                    mobileMenu.classList.add('hidden');
+                }
+
+                if (targetElement) {
+                    // Adjust scroll position to account for fixed header
+                    const headerOffset = 64; // Approximate height of the header
+                    const elementPosition = targetElement.getBoundingClientRect().top + window.pageYOffset;
+                    const offsetPosition = elementPosition - headerOffset;
+
+                    window.scrollTo({
+                        top: offsetPosition,
+                        behavior: "smooth"
+                    });
+                }
+            });
+        });
+    </script>
+
+</body>
+</html>
+
+

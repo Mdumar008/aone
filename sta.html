@@ -1,0 +1,645 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aone Hospitality Services</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+   <style>
+    /* Custom Tailwind Configuration for Gold color */
+    :root {
+        --color-gold: #D4AF37; /* A common gold shade */
+    }
+    .text-gold { color: var(--color-gold); }
+    .bg-gold { background-color: var(--color-gold); }
+    .border-gold { border-color: var(--color-gold); }
+
+    /* Inter Font from Google Fonts */
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+    body {
+        font-family: 'Inter', sans-serif;
+        background-color: #FFFFFF; /* White background for the entire page */
+        color: #1A1A1A; /* Dark text for readability */
+    }
+
+    /* Ensure smooth scrolling behavior */
+    html {
+        scroll-behavior: smooth;
+    }
+
+    /* Custom styles for professional appearance */
+    .header-gradient {
+        background: linear-gradient(to right, #FFFFFF, #F8F8F8);
+    }
+
+    .item-card {
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+        transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+    }
+
+    .item-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+    }
+
+    .whatsapp-button {
+        transition: background-color 0.2s ease-in-out, transform 0.1s ease-in-out;
+    }
+
+    .whatsapp-button:hover {
+        background-color: #B89C2F; /* Slightly darker gold on hover */
+        transform: translateY(-2px);
+    }
+
+    /* Responsive grid for items - Adjusted for 6 in a row on very large screens */
+    .products-grid {
+        display: grid;
+        gap: 1.5rem; /* Gap between cards */
+        grid-template-columns: repeat(1, 1fr); /* Default: 1 column for very small screens */
+    }
+
+    @media (min-width: 500px) { /* Custom breakpoint for slightly wider mobiles/small tablets */
+        .products-grid {
+            grid-template-columns: repeat(2, 1fr); /* 2 columns */
+        }
+    }
+
+    @media (min-width: 768px) { /* md breakpoint: Tablets */
+        .products-grid {
+            grid-template-columns: repeat(3, 1fr); /* 3 columns */
+        }
+    }
+
+    @media (min-width: 1024px) { /* lg breakpoint: Laptops */
+        .products-grid {
+            grid-template-columns: repeat(4, 1fr); /* 4 columns */
+        }
+    }
+
+    @media (min-width: 1280px) { /* xl breakpoint: Desktops */
+        .products-grid {
+            grid-template-columns: repeat(5, 1fr); /* 5 columns */
+        }
+    }
+
+    @media (min-width: 1536px) { /* 2xl breakpoint: Larger Desktops */
+        .products-grid {
+            grid-template-columns: repeat(6, 1fr); /* 6 columns */
+        }
+    }
+
+    /* Placeholder image styling */
+    .item-image-placeholder {
+        background-color: #E5E7EB; /* Light grey */
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #6B7280;
+        font-size: 0.85rem; /* Slightly smaller font for narrower cards */
+        height: 160px; /* Adjusted height for consistency with more columns */
+        object-fit: cover;
+        width: 100%;
+    }
+
+    /* Fixed WhatsApp Button to the left */
+    #main-whatsapp-inquire-button {
+        position: fixed;
+        bottom: 20px; /* Adjust as needed */
+        left: 20px; /* Positions the button 20px from the left */
+        z-index: 1000; /* Ensures it stays on top of other content */
+    }
+</style>
+ <script>
+        // All 181 items from the PDF
+        const items = [
+            { id: 1, name: "Paper A4 Size", spec: "JK Copier, 75GSM" },
+            { id: 2, name: "Paper Legal Size", spec: "JK Copier, 75GSM" },
+            { id: 3, name: "Bond Paper", spec: "(500 sheet) A4 size, 90-100 GSM" },
+            { id: 4, name: "Spiral Binding Cover", spec: "(White and Blue) A4 Size" },
+            { id: 5, name: "File cover with Board", spec: "Brown, Cobra file with clip in the middle" },
+            { id: 6, name: "File cover with Board", spec: "Any color, 2 inch folded at right side" },
+            { id: 7, name: "Jel Pen", spec: "Reynolds Trimax" },
+            { id: 8, name: "Jel Pen Refill", spec: "Reynolds Trimax" },
+            { id: 9, name: "Pen", spec: "Maxritter" },
+            { id: 10, name: "Pen Refill (Maxritter)", spec: "Maxritter" },
+            { id: 11, name: "Double Sided Pen", spec: "GD quality- Red & Blue" },
+            { id: 12, name: "Refill", spec: "(Double Sided) Red & Blue" },
+            { id: 13, name: "Stapler", spec: "Small NO. 10 Gd Quality, Kangaroo" },
+            { id: 14, name: "Stapler", spec: "Medium No. HP 45 (X shape)" },
+            { id: 15, name: "Stapler Pin", spec: "No. 10 Kangaroo" },
+            { id: 16, name: "Stapler Pin", spec: "No. 24/6 Kangaroo" },
+            { id: 17, name: "Paper Punch Machine", spec: "1 hole. Kangaroo" },
+            { id: 18, name: "Paper Punch Machine", spec: "2 hole. Kangaroo 500 DP 540" },
+            { id: 19, name: "File Lace (Nylon/cotton)", spec: "White, multi-purpose cotton file thread 10 inch for Tag file, exam paper, folder file, document tagging (100 nos)" },
+            { id: 20, name: "Pencil", spec: "Natraj / Apsara / DOMS - pack of 10" },
+            { id: 21, name: "Eraser", spec: "Natraj / Apsara / DOMS - pack of 10" },
+            { id: 22, name: "Sharpner", spec: "Natraj / Apsara / DOMS - pack of 10" },
+            { id: 23, name: "Paper cutter", spec: "18mm Stanley or equivalent" },
+            { id: 24, name: "Paper Cutter Blade", spec: "18mm stanley or equivalent" },
+            { id: 25, name: "Ruled Register No. 4", spec: "Good Quality- single line, hard cover 70-75 gsm" },
+            { id: 26, name: "Ruled Register No. 6", spec: "Good Quality- single line, hard cover 70-75 gsm" },
+            { id: 27, name: "Ruled Register No. 8", spec: "Good Quality- single line, hard cover 70-75 gsm" },
+            { id: 28, name: "Ruled Register No. 10", spec: "Good Quality- single line, hard cover 70-75 gsm" },
+            { id: 29, name: "Ruled Register No. 12", spec: "Good Quality- single line, hard cover 70-75 gsm" },
+            { id: 30, name: "Ruled Register No. 14", spec: "Good Quality- single line, hard cover 70-75 gsm" },
+            { id: 31, name: "Ruled Register No. 16", spec: "Good Quality- single line, hard cover 70-75 gsm" },
+            { id: 32, name: "Ruled Register No. 18", spec: "Good Quality- single line, hard cover 70-75 gsm" },
+            { id: 33, name: "Ruled Register No. 20", spec: "Good Quality- single line, hard cover 70-75 gsm" },
+            { id: 34, name: "Vehicle Log Book", spec: "(100 sheets) 12 columns spreading over 2 sheets (date, name of driver, name of party, journey (from & to) km. mtr (frm & to) km run, hrs (from & to) Purpose of visit, Remarks (8.5x6.5 inches) gd quality" },
+            { id: 35, name: "Peon Book", spec: "80 sheets, 6 columns(Date, Name, Sub, Peon's Name, Time, Receiver's Sign) (8.5x6.5 inches)" },
+            { id: 36, name: "Stock Book Register No. 10", spec: "size: 32X20 cm-gd qly paper (with Date, Item name, qty rate & amt, Remarks)column)" },
+            { id: 37, name: "Stock Register No 16", spec: "- do-- No. 16" },
+            { id: 38, name: "Stock Register No. 20", spec: "do --No. 20" },
+            { id: 39, name: "Dak Receipt Register No. 30", spec: "" },
+            { id: 40, name: "Dak Dispatch Register No. 30", spec: "" },
+            { id: 41, name: "Dak Pad", spec: "file binder with 4 flipper" },
+            { id: 42, name: "Plastic Folder", spec: "Envelope type- button filder" },
+            { id: 43, name: "Cellotape Dispenser (Big)", spec: "1 inch tape dispenser" },
+            { id: 44, name: "Tape Transparent", spec: "1 inch-65 meter long-combo of 6 rolls" },
+            { id: 45, name: "Tape Transparent (1 inch) Gd Quality 100 mtr", spec: "2 inch- 65 meter long-combo of 6 rolls" },
+            { id: 46, name: "Colored Tape", spec: "2 inch- 65 meter long-combo of 6 rolls (Blue/Green)" },
+            { id: 47, name: "Colored Tape", spec: "1 inch- 65 meter long-combo of 6 rolls (Blue/Green)" },
+            { id: 48, name: "Tape - Tan", spec: "2 inch-65 meter long-combo of 6 rolls" },
+            { id: 49, name: "Tape - Tan", spec: "1 inch-65 meter long-combo of 6 rolls" },
+            { id: 50, name: "Envelope Brown", spec: "9.5x 4.5 inches- pack of 50" },
+            { id: 51, name: "Envelope (White)", spec: "9.5x 4.5 inches- pack of 50" },
+            { id: 52, name: "Envelope Yellow", spec: "9.5x 4.5 inches- pack of 50" },
+            { id: 53, name: "Laminated Envelope", spec: "A4 size yellow pack of 50" },
+            { id: 54, name: "Laminated Envelope- Legal Size Yellow", spec: "pack of 50" },
+            { id: 55, name: "Laminated Envelope", spec: "A3 size yellow - pack of 50" },
+            { id: 56, name: "Envelope", spec: "Legal size, cloth lined pack of 50" },
+            { id: 57, name: "Highlighter Pen", spec: "Set of 5" },
+            { id: 58, name: "Paper Flag (Tri Color)", spec: "multi color sticky notes" },
+            { id: 59, name: "Paper Flag (single color)", spec: "3M Post-it Sticky Note Cube, 200 Sheets (4 Colors x 50 Sheets) 3\"x3\" Size | For notes, reminders, study, school and organizing" },
+            { id: 60, name: "Glue Stick Gum", spec: "25 gms Fevistik / Deli or equivalent" },
+            { id: 61, name: "Fevi Gum/Fevicol", spec: "Pidilite 200ml / squeeze (105gm)" },
+            { id: 62, name: "Liquid Gum", spec: "(Camlin)700 ml" },
+            { id: 63, name: "Gem Clip", spec: "Steel paper clip - 25 mm 100 piece pack" },
+            { id: 64, name: "Scissor Big", spec: "8.5\" long- GD quality" },
+            { id: 65, name: "Binder Clip", spec: "15mm pack of 12 pieces" },
+            { id: 66, name: "Binder Clip", spec: "19mm pack of 12 pieces" },
+            { id: 67, name: "Binder Clip", spec: "25mm pack of 12 pieces" },
+            { id: 68, name: "Binder Clip", spec: "32mm pack of 12 pieces" },
+            { id: 69, name: "Binder Clip", spec: "45mm pack of 12 pieces" },
+            { id: 70, name: "Binder Clip", spec: "51mm pack of 12 pieces" },
+            { id: 71, name: "Notesheet (yellow)", spec: "Size: 210 x 335mm, 90 gsm, book of 100 sheet, Margin Line at 1 left side and 1 at top side of the sheet (38-40 mm), file number provision at top one side of the sheet" },
+            { id: 72, name: "ARCH Box File", spec: "Lever Arch Binder Box File best for keeping office documents with PVC 2\" lever arch clip-blue" },
+            { id: 73, name: "Correction pen", spec: "Whitener, pack of 10, gd quality" },
+            { id: 74, name: "Note Pad", spec: "14 x 22 cm 40 sheets, ruled/plain, 70gsm" },
+            { id: 75, name: "Spiral Note Pad", spec: "14 x 22 cm 80 sheets, ruled/plain, 70gsm" },
+            { id: 76, name: "White Board Marker", spec: "Magnetic white board Dry Erase Marker- pack of 10" },
+            { id: 77, name: "White Borad Marker Refill", spec: "Whiteboard Marker Refill Ink 15ml" },
+            { id: 78, name: "Pin Point Marker Pen", spec: "CD/DVD/OHP Marker pen" },
+            { id: 79, name: "Permanent Marker", spec: "Thick tip" },
+            { id: 80, name: "Magnetic White Board Eraser", spec: "Magnetic White Board Eraser" },
+            { id: 81, name: "Black Board Duster (Good Quality)", spec: "Chalk Board Eraser" },
+            { id: 82, name: "Black Board Chalk", spec: "(Non dust) colored -gd quality-pack of 50" },
+            { id: 83, name: "Paper Tray", spec: "Office Document Tray, Plastic" },
+            { id: 84, name: "Paper Tray", spec: "Office Document Tray, Plastic-2 racks" },
+            { id: 85, name: "Paper Tray", spec: "office Document Metal - 3 racks, stackable" },
+            { id: 86, name: "Attendance Register (Good Quality)", spec: "Monthly Attendance Register, 50 sheets, Hard Bound, minimum 30 rows" },
+            { id: 87, name: "Attendance Register (Good Quality)", spec: "Monthly Attendance Register, 100 sheets, Hard Bound, around 15 to 20 rows" },
+            { id: 88, name: "Pencil battery AA", spec: "AA alkaline battery 400% long lasting 1.5 volt, highly durable and leak proof" },
+            { id: 89, name: "Pencil batery Ordinary AA", spec: "AAA alkaline battery 400% long lasting 1.5 volt, highly durable and leak proof" },
+            { id: 90, name: "9 volt Battery", spec: "9v battery alkaline" },
+            { id: 91, name: "Stamp pad", spec: "110x69 mm, blue" },
+            { id: 92, name: "Stamp Pad Ink", spec: "PadInk15 ml, same brand as stamp pad" },
+            { id: 93, name: "Hand Towel (Good Quality)", spec: "Washbasin hanging hand kitchen towel, 44x24 cm, pack of 4" },
+            { id: 94, name: "Hand Towel (Good Quality)", spec: "12x 18 inches- ultrasoft and absorbent" },
+            { id: 95, name: "Towel Big", spec: "Gd quality- 56x28. blue 400 gsm" },
+            { id: 96, name: "Towel Large", spec: "Office Chair Towel- 36x72 inches white 600 gsm" },
+            { id: 97, name: "Dusting Cloth", spec: "Microfiber duster cloth- 40 x 40 cm-400 gsm" },
+            { id: 98, name: "Dusting Cloth", spec: "Cotton cleaning cloth/mop- 16x24 inches- pack of 12" },
+            { id: 99, name: "Dettol Soap", spec: "Dettol original germ protection bathing soap bar- 400 gm" },
+            { id: 100, name: "Dettol Liquid Hand Wash", spec: "HandWash-200 ml" },
+            { id: 101, name: "Dettol Hand Wash Refill pack", spec: "Refillpack 1.5 Ltr" },
+            { id: 102, name: "Odonil", spec: "Odonil Bathroom Air Freshyner Zipper, Floral Bliss/blissful citrus, 10g." },
+            { id: 103, name: "Aier room freshner", spec: "Room Air Freshner Spray- Floral Bliss" },
+            { id: 104, name: "Detergent Powder", spec: "Surf Excel quick wash 1 kg/ 3kg" },
+            { id: 105, name: "Detergent Powder (Normal)", spec: "other than surf excel- 500gm/1000gm" },
+            { id: 106, name: "Broom Soft", spec: "39\" Grass Broom traditional, non-dust, comfortable grip broom stick" },
+            { id: 107, name: "Broom Hard", spec: "Bamboo/coconut hard floor jhadu, 2.5 to 3 ft long" },
+            { id: 108, name: "Dust Pan (Big)", spec: "36x 23.9x 9.5 cm" },
+            { id: 109, name: "Dust Pan with long Handle", spec: "long Handle upright- 54\" long handle" },
+            { id: 110, name: "Bleaching Powder", spec: "for Household purpose, 1 kg" },
+            { id: 111, name: "Phynyl", spec: "White, 5 ltr" },
+            { id: 112, name: "Phynyl", spec: "Black, 5 ltr (extra strong)" },
+            { id: 113, name: "Harpic", spec: "Toilet cleaner 1 ltr/5 ltr" },
+            { id: 114, name: "Glass Cleaner spray", spec: "Smooth Glass cleaner liquid spray, 500 ml" },
+            { id: 115, name: "Lizol (500ml)", spec: "floor surface disinfectant, 1 ltr/5 ltr" },
+            { id: 116, name: "MOP", spec: "Flat Mop Wet and Dry Cleaning- Tshape-360 degree- 18\"" },
+            { id: 117, name: "Wet Mop", spec: "Easy Twist Mop" },
+            { id: 118, name: "MOP (Pocha)", spec: "Spin Mop with big wheels and bucket (Gala or equivalent)" },
+            { id: 119, name: "MOP Refill", spec: "Microfiber refill for spin mop" },
+            { id: 120, name: "Wiper", spec: "Bathroom wiper for floor cleaning" },
+            { id: 121, name: "All insect killer spray", spec: "600 ml, Mortein or equivalent" },
+            { id: 122, name: "Hit spray", spec: "Red-600 or 700 ml" },
+            { id: 123, name: "Plastic Mug", spec: "2 ltr" },
+            { id: 124, name: "Plastic Bucket", spec: "25Ltrs Cello/Milton or equivalent" },
+            { id: 125, name: "Dustbin", spec: "Open Mesh Dustbin- 12-15 ltrs" },
+            { id: 126, name: "Dustbing with Lid", spec: "(34.5x26.2x49.5 cm) 28 ltrs" },
+            { id: 127, name: "Dustbin (Large) with lid", spec: "120 ltrs extra large dustbin with wheels" },
+            { id: 128, name: "Dustbin (Large) with lid", spec: "120 ltrs extra large dustbin with swing lid" },
+            { id: 129, name: "Godrej Lock & Key", spec: "7 Levers Navtal-4 keys Brass finish" },
+            { id: 130, name: "Ordinary Lock & Key", spec: "7 Levers, ordinary, minimum 6 keys" },
+            { id: 131, name: "Extension Board (electric)", spec: "16amp)- 3 pin socket-2 nos, 2 pin socket-1 no." },
+            { id: 132, name: "Three Pin Socket Extension Board (Computer)", spec: "Multi Plug extension board with 6 power sockets, 6 amp- 2m cord length" },
+            { id: 133, name: "Electrical Board (Cube)", spec: "Cube Extension Board with USB Port with Universal Sockets and USB (2.4 A) (QC 3.0) with Overload Protector, Indicator, 1.8 mtr Extension Cord, Safety Shutter-Multi Plug Socket" },
+            { id: 134, name: "Rubber Gloves", spec: "12 Inches Long Reusable Nitrile Chemical Resistant Rubber Hand Gloves For Industrial Purpose, Janitorial, Construction, Gardening Home Kitchen Cleaning Gloves/Dish Washing Gloves." },
+            { id: 135, name: "Toilet Paper Roll-Gd Quality", spec: "Toilet Paper/Tissue Roll, soft and highly absorbent - 12 Rolls pack (160 Pulls Per Roll, 1920 Sheets)" },
+            { id: 136, name: "Toilet Brush-Gd Quality", spec: "Hard brush with Hard handle" },
+            { id: 137, name: "Medimix Soap", spec: "(smallsachet) 10-15 gms (ayurvedic soap with 18 herbs) pack of 30" },
+            { id: 138, name: "Mosquito Repellent machine", spec: "7 x 45 refill plus machine" },
+            { id: 139, name: "Mosquito Repellent Refill", spec: "Refill pack" },
+            { id: 140, name: "Napthalene Balls (Kapur)", spec: "BallsKapur)" },
+            { id: 141, name: "Dustbin bag / Trash Bag", spec: "(big size)-strong gd quality 42 x 48 inches, Jumbo XL, Heavt Duty, HDPE material for maximum strength and tear resistnace, Biodegrable, Black" },
+            { id: 142, name: "Colin", spec: "1 ltr" },
+            { id: 143, name: "Paper A3 Size", spec: "JK Copier, 75GSM" },
+            { id: 144, name: "Photo Paper A4 Size", spec: "Water Proof 180 gsm, (pack of 50 sheet) High gloss- instant drying" },
+            { id: 145, name: "Screw Driver set", spec: "Taparia and equivalent (5 pieces set)" },
+            { id: 146, name: "Sealing Wax", spec: "Wax Seal Sticks, Fire Manuscript Sealing Seal Wax Sticks For Postage Letter Retro Vintage Wax Seal Stamp (Flashing Red Wine), 5 pcs pack" },
+            { id: 147, name: "Thread Roll", spec: "Piping Thread Dori for Sewing Purpose Pack of 4 Rolls (25Mtr Each Roll)" },
+            { id: 148, name: "Counting Sponze", spec: "Finger Wet Sponge, Finger Damper 2.7 Inch Diameter for Cash Counting Multicolor 3in1 Set" },
+            { id: 149, name: "Remote Bell", spec: "Wireless Office Door bell, with led light 50 mtr operating range" },
+            { id: 150, name: "Dista Paper (Plain)", spec: "A4 Rough Paper Bundle (Recycled) for Practice, Calculations, Competitive Exam Preparation (120 Qty, Off White)" },
+            { id: 151, name: "Soap Case", spec: "Plastic Self drainig soap holder -14x9 cm" },
+            { id: 152, name: "Water Glass", spec: "(Borosil) 350 ml (6 nos / box)" },
+            { id: 153, name: "Room Freshner", spec: "GD Quality- spray" },
+            { id: 154, name: "Battery 23A", spec: "23A alkaline battery 12 volt" },
+            { id: 155, name: "Sign Pen", spec: "SignPen" },
+            { id: 156, name: "9 volt Battery", spec: "9 volt battery lithium" },
+            { id: 157, name: "Pin Holder Box", spec: "Pin clip magnetic holder dispenser" },
+            { id: 158, name: "T Alpin (coloured)", spec: "Stainless Steel T shaped pins" },
+            { id: 159, name: "Electro Nickle Plated", spec: "Multi color plastic head push pin for notice board" },
+            { id: 160, name: "Board Pin", spec: "Golden push pin, brass coated 50 pins pack" },
+            { id: 161, name: "Gem Clip", spec: "Steel paper clip 30 mm-120 piece pack" },
+            { id: 162, name: "Paper Weight for office table", spec: "Acrylic" },
+            { id: 163, name: "Desktop Calculator", spec: "14 digits(large display) special keys with keyguard Dual Power - Solar & Battery(AA), Ergonomic Key Design Auto Replay, 99 steps check and correct" },
+            { id: 164, name: "Plastic Rope - Flat Face", spec: "Sutli rope 500 mtrs" },
+            { id: 165, name: "Poker", spec: "paper piercing tool-taparia - 18 cm" },
+            { id: 166, name: "Double sided Tape", spec: "silicon tape, 1 inch 3-5 mtr long" },
+            { id: 167, name: "Stick Folder", spec: "Plastic stick transparent file folder" },
+            { id: 168, name: "Cellotape Dispenser (small)", spec: "1/2 inch tape dispenser" },
+            { id: 169, name: "Scale", spec: "Metal (30 cm)" },
+            { id: 170, name: "Scale", spec: "Plastic, (30 cm)" },
+            { id: 171, name: "Stapler Pin", spec: "No 23/17 Heavy Duty Kangaroo/Kores" },
+            { id: 172, name: "Stapler", spec: "Large HD 23 S 24 (Heavy Duty)" },
+            { id: 173, name: "Color Paper", spec: "(75 gsm)(4 color) A4 Size pack of 100 sheets" },
+            { id: 174, name: "Color Paper", spec: "(100-120 gsm)(4 color) A4 Size pack of 100 sheets" },
+            { id: 175, name: "Chart paper", spec: "Normal-white" },
+            { id: 176, name: "Plastic Spiral Binding ring/loop/coil", spec: "8mm dia" },
+            { id: 177, name: "Plastic Spiral Binding ring/loop/coil (small)", spec: "10mm dia" },
+            { id: 178, name: "Plastic Spiral Binding ring/loop/coil (Medium)", spec: "12mm" },
+            { id: 179, name: "Plastic Spiral Binding ring/loop/coil (Big)", spec: "16mm" },
+            { id: 180, name: "Plastic Spiral Binding ring/loop/coil (Big)", spec: "20mm" },
+            { id: 181, name: "Graph Paper", spec: "(Big size) in cm- 22\"x29\"" }
+        ];
+
+        // Array to store selected items for inquiry
+        let selectedItems = [];
+
+        // Function to add/remove item from inquiry list
+        function toggleInquiry(itemId, itemName, itemSpec, buttonElement) {
+            const existingItemIndex = selectedItems.findIndex(item => item.id === itemId);
+
+            if (existingItemIndex > -1) {
+                // Item is already in the list, remove it
+                selectedItems.splice(existingItemIndex, 1);
+                buttonElement.textContent = 'Add to Inquire';
+                buttonElement.classList.remove('bg-red-500', 'hover:bg-red-600');
+                buttonElement.classList.add('bg-gold', 'hover:bg-opacity-90');
+            } else {
+                // Item is not in the list, add it
+                selectedItems.push({ id: itemId, name: itemName, spec: itemSpec });
+                buttonElement.textContent = 'Remove from Inquire';
+                buttonElement.classList.remove('bg-gold', 'hover:bg-opacity-90');
+                buttonElement.classList.add('bg-red-500', 'hover:bg-red-600');
+            }
+            updateWhatsAppInquiryButton();
+        }
+
+        // Function to open WhatsApp chat with all selected items
+        function inquireAllOnWhatsApp() {
+            if (selectedItems.length === 0) {
+                alert("Please add items to your inquiry list first.");
+                return;
+            }
+
+            const phoneNumber = '919867531298';
+            let message = "Hello Aone Hospitality Services, I am interested in the following items:\n\n";
+
+            selectedItems.forEach((item, index) => {
+                message += `${index + 1}. ${item.name} - ${item.spec}\n`;
+            });
+
+            message += "\nPlease provide more details and pricing.";
+            
+            const whatsappUrl = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`;
+            window.open(whatsappUrl, '_blank');
+            
+            // Optionally clear the selection after sending
+            selectedItems = [];
+            document.querySelectorAll('.item-card button').forEach(button => {
+                button.textContent = 'Add to Inquire';
+                button.classList.remove('bg-red-500', 'hover:bg-red-600');
+                button.classList.add('bg-gold', 'hover:bg-opacity-90');
+            });
+            updateWhatsAppInquiryButton();
+        }
+
+        // Function to update the visibility and text of the main WhatsApp inquiry button
+        function updateWhatsAppInquiryButton() {
+            const mainWhatsAppButton = document.getElementById('main-whatsapp-inquire-button');
+            if (selectedItems.length > 0) {
+                mainWhatsAppButton.style.display = 'inline-flex';
+                mainWhatsAppButton.textContent = `Inquire on WhatsApp (${selectedItems.length} items)`;
+            } else {
+                mainWhatsAppButton.style.display = 'none';
+            }
+        }
+
+
+        // Function to render all items into the products container
+        document.addEventListener('DOMContentLoaded', () => {
+            const productsContainer = document.getElementById('products-container');
+            items.forEach(item => {
+                // Sanitize item.spec for use in JavaScript string for onclick
+                const sanitizedSpec = item.spec.replace(/'/g, "\\'");
+                const itemCard = `
+                    <div class="item-card bg-white rounded-xl overflow-hidden shadow-lg p-4 flex flex-col items-center text-center">
+                        <img src="https://placehold.co/160x160/E5E7EB/6B7280?text=Item+Image" alt="${item.name}" class="item-image-placeholder rounded-lg mb-4">
+                        <h3 class="text-base font-semibold mb-2 text-black">${item.name}</h3>
+                        <p class="text-gray-700 text-xs mb-4 flex-grow">${item.spec}</p>
+                        <button onclick="toggleInquiry(${item.id}, '${item.name}', '${sanitizedSpec}', this)"
+                                class="whatsapp-button bg-gold text-white font-bold py-2 px-6 rounded-full shadow-md hover:bg-opacity-90 transform hover:scale-105 transition-all duration-300 ease-in-out text-sm">
+                            Add to Inquire
+                        </button>
+                    </div>
+                `;
+                productsContainer.innerHTML += itemCard;
+            });
+
+            // Add a main "Inquire on WhatsApp" button at the bottom of the products section
+            const mainInquiryButtonHtml = `
+                <div class="w-full text-center mt-8">
+                    <button id="main-whatsapp-inquire-button" onclick="inquireAllOnWhatsApp()"
+                            class="hidden inline-flex items-center justify-center bg-teal-600 text-white font-bold py-3 px-8 rounded-full shadow-lg hover:bg-teal-700 hover:scale-105 transition duration-300 transform">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-2" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+                        </svg>
+                        Inquire on WhatsApp (0 items)
+                    </button>
+                </div>
+            `;
+            productsContainer.insertAdjacentHTML('afterend', mainInquiryButtonHtml);
+        });
+
+        // Toggle mobile menu visibility
+        const mobileMenuButton = document.getElementById('mobile-menu-button');
+        const mobileMenu = document.getElementById('mobile-menu');
+
+        if (mobileMenuButton) {
+            mobileMenuButton.addEventListener('click', () => {
+                mobileMenu.classList.toggle('hidden');
+            });
+        }
+
+        // Back to top button functionality
+        const backToTopButton = document.getElementById('back-to-top');
+
+        window.onscroll = function() {
+            if (document.body.scrollTop > 20 || document.documentElement.scrollTop > 20) {
+                backToTopButton.style.display = "block";
+            } else {
+                backToTopButton.style.display = "none";
+            }
+        };
+
+        // Smooth scroll for back to top button
+        backToTopButton.addEventListener('click', function() {
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        });
+
+        // Smooth scroll for navigation links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+
+                const targetId = this.getAttribute('href');
+                const targetElement = document.querySelector(targetId);
+
+                // Close mobile menu if open
+                const mobileMenu = document.getElementById('mobile-menu');
+                if (!mobileMenu.classList.contains('hidden')) {
+                    mobileMenu.classList.add('hidden');
+                }
+
+                if (targetElement) {
+                    // Adjust scroll position to account for fixed header
+                    const headerOffset = 64; // Approximate height of the header
+                    const elementPosition = targetElement.getBoundingClientRect().top + window.pageYOffset;
+                    const offsetPosition = elementPosition - headerOffset;
+
+                    window.scrollTo({
+                        top: offsetPosition,
+                        behavior: "smooth"
+                    });
+                }
+            });
+        });
+    </script>
+  <script src="https://cdn.tailwindcss.com"></script>
+     <style>
+   .whatsapp_float{
+            position:fixed; 
+            bottom:40px;
+            right:20px;
+        }
+        .call_float{
+            position:fixed; 
+            bottom:40px;          
+            left:20px;
+        }
+    </style>
+    <div class="whatsapp_float">
+        <a href="https://wa.me/919867531298" target="_blank"><img src='wp.png' width="60px"
+                                                                 class="whatsapp_float_btn"/></a>
+    </div>
+     <div class="call_float">
+        <a href="tel:+917387869062" target="_blank"><img src='call.png' width="60px"
+                                                                 [cite_start]class="call_float_btn"/></a> 
+    </div>   
+    <style>
+        /* Custom font import for Inter */
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap'); 
+        body {
+            font-family: 'Inter', sans-serif; 
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+        /* Custom scroll-behavior for smooth scrolling on internal links */
+        html {
+            scroll-behavior: smooth; 
+        }
+        /* Style for the back-to-top button - initially hidden */
+        #back-to-top {
+            display: none; 
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            z-index: 99;
+            border: none;
+            outline: none;
+            background-color: #0d9488; /* Teal-600 */ 
+            color: white;
+            cursor: pointer; 
+            padding: 0.75rem 1rem;
+            border-radius: 0.5rem; /* Rounded corners */
+            font-size: 1.5rem; 
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06); 
+            transition: background-color 0.3s ease-in-out, transform 0.2s ease-in-out;
+        }
+        #back-to-top:hover {
+            background-color: #0f766e; /* Darker Teal */ 
+            transform: translateY(-2px); 
+        }
+        
+    </style>
+</head>
+<body class="bg-gray-50 text-gray-800">
+
+    <header class="bg-white shadow-sm py-4 fixed top-0 w-full z-50">
+        <nav class="container mx-auto px-4 flex justify-between items-center">
+            <a href="#hero" class="text-2xl font-bold text-teal-600 flex items-center rounded-md p-2">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 mr-2 text-blue-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"> 
+                    <path d="M12 2L2 7l10 5 10-5-10-5z"></path>
+                    <path d="M2 17l10 5 10-5"></path>
+                    <path d="M2 12l10 5 10-5"></path>
+                </svg>
+                Aone Hospitality Services 
+            </a>
+            <div class="hidden md:flex space-x-8">
+                <a href="index.html" class="text-gray-600 hover:text-teal-600 font-medium transition duration-300 rounded-md p-2">Home</a>
+                <a href="product.html" class="text-gray-600 hover:text-teal-600 font-medium transition duration-300 rounded-md p-2">Products</a>
+                <a href="about.html" class="text-gray-600 hover:text-teal-600 font-medium transition duration-300 rounded-md p-2">About Us</a> 
+                <a href="#testimonials" class="text-gray-600 hover:text-teal-600 font-medium transition duration-300 rounded-md p-2">Testimonials</a>
+                <a href="#contact" class="px-5 py-2 bg-teal-600 text-white rounded-lg hover:bg-teal-700 transition duration-300 shadow-md">Contact Us</a>
+            </div>
+            
+            <button id="mobile-menu-button" class="md:hidden text-gray-600 hover:text-teal-600 p-2 rounded-md focus:outline-none focus:ring-2 focus:ring-teal-500 transition duration-300">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16m-7 6h7" />
+                </svg>
+            </button> 
+        </nav>
+        <div id="mobile-menu" class="hidden md:hidden bg-white shadow-lg py-4 border-t border-gray-200">
+            <a href="index.html" class="block px-4 py-2 text-gray-700 hover:bg-gray-100 rounded-md transition duration-300">Home</a>
+            <a href="product.html" class="block px-4 py-2 text-gray-700 hover:bg-gray-100 rounded-md transition duration-300">Products</a>
+            <a href="about.html" class="block px-4 py-2 text-gray-700 hover:bg-gray-100 rounded-md transition duration-300">About Us</a> 
+            <a href="about.html" class="block px-4 py-2 text-gray-700 hover:bg-gray-100 rounded-md transition duration-300">Testimonials</a>
+            <a href="#contact" class="block px-4 py-2 text-teal-600 hover:bg-teal-50 rounded-md transition duration-300 font-medium">Contact Us</a>
+        </div>
+    </header>
+      <section id="hero" class="relative bg-gradient-to-r from-blue-600 to-teal-600 text-white py-24 md:py-36 mt-16 overflow-hidden">
+        <div class="absolute inset-0 bg-pattern opacity-10"></div> <div class="container mx-auto px-4 text-center relative z-10"> 
+            <h1 class="text-4xl md:text-6xl font-extrabold leading-tight mb-6 animate-fade-in-up">
+                Experience Top Quility Products<span class="text-yellow-300">Stationary Products</span>
+            </h1>
+            <p class="text-lg md:text-xl max-w-2xl mx-auto mb-10 opacity-90 animate-fade-in-up delay-200">
+                Premium brand product from direct manufacturing plant at discounted price from market. 
+            </p>
+            <a href="#products" class="inline-block bg-white text-teal-700 font-bold py-3 px-8 rounded-full shadow-lg hover:bg-gray-100 hover:scale-105 transition duration-300 transform animate-fade-in-up delay-400">
+                Explore Our Products
+            </a>
+        </div>
+    </section>
+
+    <section class="bg-gray-50 py-8 px-6 md:px-12 text-center border-b border-gray-100">
+        <h3 class="text-2xl font-bold text-black mb-4">Operating Hours</h3> 
+        <p class="text-lg text-gray-700">
+            Monday to Saturday: <span class="font-semibold text-gold">9:30 AM - 7:30 PM</span>
+        </p>
+    </section>
+
+    <main class="container mx-auto px-6 py-12">
+        <h2 class="text-4xl font-extrabold text-center text-black mb-10">Our Products</h2>
+        <div id="products-container" class="products-grid">
+            
+        </div>
+    </main>
+
+   <section id="contact" class="bg-gradient-to-r from-teal-600 to-blue-600 text-white py-16 md:py-24 text-center">
+        <div class="container mx-auto px-4">
+            <h2 class="text-3xl md:text-4xl font-bold mb-6">Ready to Experience the <span class="text-yellow-300">Aone Hospitality Services</span> Difference?</h2>
+            <p class="text-lg md:text-xl max-w-2xl mx-auto mb-10 opacity-90">
+                Get in touch with us today to learn more about our products or to place an order. 
+            </p>
+            <div class="flex flex-col sm:flex-row justify-center gap-4">
+                <a href="mailto:aonehospitalitys@gmail.com" class="inline-flex items-center justify-center bg-white text-teal-700 font-bold py-3 px-8 rounded-full shadow-lg hover:bg-gray-100 hover:scale-105 transition duration-300 transform">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-2" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path> 
+                        <polyline points="22,6 12,13 2,6"></polyline>
+                    </svg>
+                    Email Us
+                </a> 
+                <a href="https://wa.me/919867531298" class="inline-flex items-center justify-center border-2 border-white text-white font-bold py-3 px-8 rounded-full shadow-lg hover:bg-white hover:text-teal-700 hover:scale-105 transition duration-300 transform">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-2" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path> 
+                    </svg>
+                    WhatsApp Us
+                </a>
+                <a href="tel:+917387869062" class="inline-flex items-center justify-center border-2 border-white text-white font-bold py-3 px-8 rounded-full shadow-lg hover:bg-white hover:text-teal-700 hover:scale-105 transition duration-300 transform"> 
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-2" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-3.95-3.95A19.79 19.79 0 0 1 2.05 4.18 2 2 0 0 1 4.05 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path> 
+                    </svg>
+                    Call Us
+                </a>
+            </div> 
+        </div>
+    </section>
+
+    <footer class="bg-gray-800 text-gray-300 py-10">
+        <div class="container mx-auto px-4 text-center">
+            <div class="flex flex-col md:flex-row justify-between items-center mb-8">
+                <a href="#hero" class="text-xl font-bold text-teal-400 flex items-center mb-4 md:mb-0"> 
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-2 text-blue-300" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M12 2L2 7l10 5 10-5-10-5z"></path>
+                        <path d="M2 17l10 5 10-5"></path>
+                        <path d="M2 12l10 5 10-5"></path> 
+                    </svg>
+                   Aone Hospitality Services
+                </a>
+                <div class="flex flex-wrap justify-center gap-x-8 gap-y-2 mb-4 md:mb-0"> 
+                    <a href="about.html" class="hover:text-white transition duration-300">About</a>
+                    <a href="product.html" class="hover:text-white transition duration-300">Products</a>
+                    <a href="#contact" class="hover:text-white transition duration-300">Contact</a>
+                </div> 
+                <div class="flex space-x-4">
+                    <a href="#" class="text-gray-400 hover:text-white transition duration-300">
+                        <svg xmlns="http://www.w3.org/0000/svg" class="h-6 w-6" viewBox="0 0 24 24" fill="currentColor"> 
+                            <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"></path>
+                        </svg>
+                    </a>
+                    <a href="#" class="text-gray-400 hover:text-white transition duration-300"> 
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M23 3a10.9 10.9 0 0 1-3.14 1.53 4.48 4.48 0 0 0-7.86 3v1A10.66 10.66 0 0 1 3 4s-4 9 5 13a11.64 11.64 0 0 1-7 2c17 0 21-12 21-15.5V3z"></path> 
+                        </svg>
+                    </a>
+                    <a href="#" class="text-gray-400 hover:text-white transition duration-300">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" viewBox="0 0 24 24" fill="currentColor"> 
+                            <rect width="20" height="20" x="2" y="2" rx="5" ry="5"></rect>
+                            <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
+                            <line x1="17.5" x2="17.5" y1="6.5" y2="6.5"></line> 
+                        </svg>
+                    </a>
+                </div>
+            </div>
+            <p class="text-sm text-gray-500">&copy; 2025 Aone Hospitality Services. All rights reserved.</p> 
+        </div>
+    </footer>
+
+   </body>
+</html>
